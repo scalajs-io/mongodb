@@ -1,0 +1,9 @@
+{
+  "name": "scalajs-io",
+  "version": "7.4.0",
+  "private": true,
+  "dependencies": {
+    "mongodb": "^2.2.22",
+    "sourcemap": "^0.1.0"
+  }
+}
