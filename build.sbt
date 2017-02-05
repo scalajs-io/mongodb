@@ -17,7 +17,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "mongodb",
     organization := "io.scalajs",
-    description := "JQuery API bindings for Scala.js",
+    description := "MongoDB API bindings for Scala.js",
     version := apiVersion,
     scalaVersion := scalaJsVersion,
     scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions", "-Xlint"),
