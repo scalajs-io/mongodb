@@ -16,7 +16,7 @@ lazy val root = (project in file(".")).
   enablePlugins(ScalaJSPlugin).
   settings(
     name := "mongodb",
-    organization := "io.scalajs",
+    organization := "io.scalajs.npm",
     description := "MongoDB API bindings for Scala.js",
     version := apiVersion,
     scalaVersion := scalaJsVersion,
