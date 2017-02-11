@@ -1,6 +1,6 @@
 {
-  "name": "scalajs-io",
-  "version": "7.4.0",
+  "name": "mongodb-scalajs",
+  "version": "2.2.22",
   "private": true,
   "dependencies": {
     "mongodb": "^2.2.22",

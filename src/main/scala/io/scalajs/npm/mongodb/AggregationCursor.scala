@@ -30,7 +30,7 @@ trait AggregationCursor extends nodejs.stream.Readable {
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
     */
-  def close(callback: js.Function): Unit = js.native
+  override def close(callback: js.Function): Unit = js.native
 
   /**
     * Close the cursor.

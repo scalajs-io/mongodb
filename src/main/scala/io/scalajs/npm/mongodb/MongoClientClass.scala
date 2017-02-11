@@ -27,7 +27,7 @@ object MongoClientClass {
   implicit class MongoClientClassExtensions(val `class`: MongoClientClass) extends AnyVal {
 
     @inline
-    def connectFuture(servers: String): Future[Db] = callbackMongoFuture[Db](`class`.connect(servers, _))
+    def connectFuture(url: String): Future[Db] = callbackMongoFuture[Db](`class`.connect(url, _))
 
   }
 

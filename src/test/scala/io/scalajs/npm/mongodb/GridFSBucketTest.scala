@@ -4,28 +4,34 @@ import io.scalajs.nodejs.fs.Fs
 import io.scalajs.npm.mongodb.gridfs.GridFSBucket
 import org.scalatest.FunSpec
 
+import scala.concurrent.Promise
+import scala.language.existentials
+
 /**
   * GridFSBucket Test
   * @author lawrence.daniels@gmail.com
   */
-class GridFSBucketTest extends FunSpec {
-  val url = "mongodb://localhost:27017/test"
+class GridFSBucketTest extends FunSpec with MongoDBTestSupport {
+  private val imagePath = Fs.realpathSync("./src/test/resources/kermit-yoda.jpeg")
 
   describe("GridFSBucket") {
 
     it("supports streaming files to disk") {
-      // TODO either mock or use an embedded server
-      /*
-      MongoClient.connect(
-        url,
-        (err, db) => {
-          assert(null == err, err)
 
-          val bucket = new GridFSBucket(db)
-          Fs.createReadStream(Fs.realpathSync("./src/test/resources/kermit-yoda.jpeg"))
-            .pipe(bucket.openUploadStream("kermit+yoda.jpeg"))
-            .on("error", (error: MongoError) => assert(null == error, error))
-        })*/
+      withMongo("GridFSBucket") { db =>
+
+        val promise = Promise[Unit]()
+        val bucket = new GridFSBucket(db)
+
+        info(s"Transferring image '$imagePath'...")
+        Fs.createReadStream(imagePath)
+          .pipe(bucket.openUploadStream("kermit-yoda.jpeg"))
+          .onError(error => promise.failure(new RuntimeException(error.message)))
+          .onEnd(() => promise.success(()))
+
+        promise.future
+      }
+
     }
 
   }

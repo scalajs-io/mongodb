@@ -52,7 +52,7 @@ class Cursor extends nodejs.stream.Readable {
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
     */
-  def close(callback: js.Function): Unit = js.native
+  override def close(callback: js.Function): Unit = js.native
 
   /**
     * Add a comment to the cursor query allowing for tracking the comment in the log.
@@ -288,8 +288,6 @@ class Cursor extends nodejs.stream.Readable {
 
   /**
     * TODO document me
-    * @param enable
-    * @return
     */
   def snapshot(enable: Boolean): this.type = js.native
 
@@ -329,11 +327,11 @@ class Cursor extends nodejs.stream.Readable {
 object Cursor {
 
   type CursorFlag = String
-  val TAILABLE: CursorFlag        = "tailable"
-  val OPLOGREPLAY: CursorFlag     = "oplogReplay"
+  val TAILABLE: CursorFlag = "tailable"
+  val OPLOGREPLAY: CursorFlag = "oplogReplay"
   val NOCURSORTIMEOUT: CursorFlag = "noCursorTimeout"
-  val AWAITDATA: CursorFlag       = "awaitData"
-  val PARTIAL: CursorFlag         = "partial"
+  val AWAITDATA: CursorFlag = "awaitData"
+  val PARTIAL: CursorFlag = "partial"
 
   /**
     * Cursor Extensions
@@ -360,7 +358,7 @@ object Cursor {
       */
     @inline
     def countFuture(applySkipLimit: Boolean): Future[Cursor] =
-      callbackMongoFuture[Cursor](cursor.count(applySkipLimit, _))
+    callbackMongoFuture[Cursor](cursor.count(applySkipLimit, _))
 
     /**
       * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -409,7 +407,7 @@ object Cursor {
       */
     @inline
     def setReadPreferenceFuture(pref: String): Future[Cursor] =
-      callbackMongoFuture[Cursor](cursor.setReadPreference(pref, _))
+    callbackMongoFuture[Cursor](cursor.setReadPreference(pref, _))
 
     /**
       * Sets the skip parameter of this cursor to the given value.
@@ -438,7 +436,7 @@ object Cursor {
       */
     @inline
     def sortFuture(key: String, direction: Int | String): Future[Cursor] =
-      callbackMongoFuture[Cursor](cursor.sort(key, direction, _))
+    callbackMongoFuture[Cursor](cursor.sort(key, direction, _))
 
     /**
       * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
