@@ -47,12 +47,14 @@ MongoClient.connect(url, (err, db) => {
         // Get the results using a find stream
         val cursor = col.find(doc()).stream(StreamTransform((doc: Sample) => JSON.stringify(doc)))
         cursor.onData((doc: Sample) => console.log(doc))
-        cursor.onOnce(() => db.close())
+        cursor.onEnd(() => db.close())
     })
 })
 
 @ScalaJSDefined
-class Sample(var _id: js.UndefOr[ObjectID] = js.undefined, var a: js.UndefOr[Int] = js.undefined) extends js.Object
+class Sample(var _id: js.UndefOr[ObjectID] = js.undefined, 
+             var a: js.UndefOr[Int] = js.undefined) 
+  extends js.Object
 ```
 
 #### Artifacts and Resolvers

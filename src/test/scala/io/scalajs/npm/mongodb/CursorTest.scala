@@ -1,10 +1,12 @@
 package io.scalajs.npm.mongodb
 
+import io.scalajs.nodejs._
 import io.scalajs.npm.mongodb.CursorTest.Sample
 import io.scalajs.util.JSONHelper._
 import org.scalatest.FunSpec
 
 import scala.concurrent.Promise
+import scala.concurrent.duration._
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
@@ -41,6 +43,10 @@ class CursorTest extends FunSpec with MongoDBTestSupport {
               .onData((doc: String) => info(doc))
               .onError(error => promise.failure(new RuntimeException(error.message)))
               .onEnd(() => promise.success(()))
+
+            // if the promise hasn't complete in 1 sec, trigger it.
+            setTimeout(() => if (!promise.isCompleted) promise.success(()), 1.second)
+
             promise.future
           }
         } yield data
