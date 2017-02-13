@@ -1,6 +1,10 @@
 MongoDB API for Scala.js
 ================================
-This is a Scala.js type-safe binding for [mongodb](http://mongodb.github.io/node-mongodb-native/2.2/api/)
+[mongodb](http://mongodb.github.io/node-mongodb-native/2.2/api/) - The official MongoDB driver for Node.js.
+
+#### Description
+
+The official MongoDB driver for Node.js. Provides a high-level API on top of mongodb-core that is meant for end users.
 
 <a name="build_requirements"></a>
 #### Build Requirements
