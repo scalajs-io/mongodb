@@ -1,5 +1,5 @@
 {
-  "name": "mongodb-scalajs",
+  "name": "mongodb-sjs",
   "version": "2.2.22",
   "private": true,
   "dependencies": {

@@ -2,24 +2,24 @@ MongoDB API for Scala.js
 ================================
 [mongodb](http://mongodb.github.io/node-mongodb-native/2.2/api/) - The official MongoDB driver for Node.js.
 
-#### Description
+### Description
 
 The official MongoDB driver for Node.js. Provides a high-level API on top of mongodb-core that is meant for end users.
 
 <a name="build_requirements"></a>
-#### Build Requirements
+### Build Requirements
 
-* [ScalaJs.io v0.3.x](https://github.com/ldaniels528/scalajs.io)
+* [ScalaJs.io v0.3.x](https://github.com/scalajs-io/scalajs.io)
 * [SBT v0.13.13](http://www.scala-sbt.org/download.html)
 
 <a name="building_sdk"></a>
-#### Build/publish the SDK locally
+### Build/publish the SDK locally
 
 ```bash
  $ sbt clean publish-local
 ```
 
-#### Running the tests
+### Running the tests
 
 Before running the tests the first time, you must ensure the npm packages are installed:
 
@@ -33,7 +33,7 @@ Then you can run the tests:
 $ sbt test
 ```
 
-#### Examples
+### Examples
 
 ```scala
 import io.scalajs.JSON
@@ -61,7 +61,7 @@ class Sample(var _id: js.UndefOr[ObjectID] = js.undefined,
   extends js.Object
 ```
 
-#### Artifacts and Resolvers
+### Artifacts and Resolvers
 
 To add the `MongoDB` binding to your project, add the following to your build.sbt:  
 
