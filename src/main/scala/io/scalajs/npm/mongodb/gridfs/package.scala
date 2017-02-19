@@ -13,6 +13,20 @@ import scala.scalajs.js.Array
 package object gridfs {
 
   /**
+    * GridFS Bucket Read Stream Extensions
+    * @author lawrence.daniels@gmail.com
+    */
+  implicit class GridFSBucketReadStreamExtensions(val stream: GridFSBucketReadStream) extends AnyVal {
+
+    /**
+      * Fires when the stream loaded the file document corresponding to the provided id.
+      */
+    @inline
+    def onFile(callback: js.Function): stream.type = stream.on("file", callback)
+
+  }
+
+  /**
     * Grid Store Extensions
     * @author lawrence.daniels@gmail.com
     */

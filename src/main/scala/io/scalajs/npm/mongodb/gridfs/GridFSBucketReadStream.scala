@@ -1,8 +1,11 @@
 package io.scalajs.npm.mongodb.gridfs
 
-import io.scalajs.nodejs
+import io.scalajs.{RawOptions, nodejs}
+import io.scalajs.npm.mongodb.Collection
 
 import scala.scalajs.js
+import scala.scalajs.js.annotation.JSImport
+import scala.scalajs.js.|
 
 /**
   * GridFS Bucket Read Stream
@@ -10,7 +13,13 @@ import scala.scalajs.js
   * @see {{{ http://mongodb.github.io/node-mongodb-native/2.1/api/GridFSBucketReadStream.html }}}
   */
 @js.native
-trait GridFSBucketReadStream extends nodejs.stream.Readable {
+@JSImport("mongodb", "GridFSBucketReadStream")
+class GridFSBucketReadStream(chunks: Collection,
+                             files: Collection,
+                             readPreference: js.Any,
+                             filter: js.Any,
+                             options: ReadStreamOptions | RawOptions)
+  extends nodejs.stream.Readable {
 
   /**
     * Marks this stream as aborted (will never push another data event) and kills the underlying cursor.
@@ -33,27 +42,5 @@ trait GridFSBucketReadStream extends nodejs.stream.Readable {
     * @param offset the offset in bytes to start reading at
     */
   def start(offset: Int): GridFSBucketReadStream = js.native
-
-}
-
-/**
-  * GridFS Bucket Read Stream Companion
-  * @author lawrence.daniels@gmail.com
-  */
-object GridFSBucketReadStream {
-
-  /**
-    * Read Stream Extensions
-    * @author lawrence.daniels@gmail.com
-    */
-  implicit class ReadStreamExtensions(val stream: GridFSBucketReadStream) extends AnyVal {
-
-    /**
-      * Fires when the stream loaded the file document corresponding to the provided id.
-      */
-    @inline
-    def onFile(callback: js.Function) = stream.on("file", callback)
-
-  }
 
 }

@@ -1,7 +1,6 @@
 package io.scalajs.npm.mongodb
 
 import io.scalajs.util.ScalaJsHelper._
-import io.scalajs.util.ScalaJsHelper
 
 import scala.scalajs.js
 
