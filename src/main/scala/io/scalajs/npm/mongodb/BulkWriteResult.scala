@@ -5,10 +5,26 @@ import scala.scalajs.js.annotation.JSName
 
 /**
   * Bulk Write Result
-  * @author lawrence.daniels@gmail.com
+  * @param ok        Did bulk operation correctly execute
+  * @param nInserted Number of inserted documents
+  * @param nUpdated  Number of documents updated logically
+  * @param nUpserted Number of upserted documents
+  * @param nModified Number of documents updated physically on disk
+  * @param nRemoved  Number of removed documents
   */
 @js.native
-trait BulkWriteResult extends js.Object {
+@JSName("BulkWriteResult")
+class BulkWriteResult(val ok: Boolean,
+                      val nInserted: Int,
+                      val nUpdated: Int,
+                      val nUpserted: Int,
+                      val nModified: Int,
+                      val nRemoved: Int)
+  extends js.Object {
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //      Methods
+  /////////////////////////////////////////////////////////////////////////////////
 
   /**
     * Return an array of inserted ids
@@ -72,11 +88,3 @@ trait BulkWriteResult extends js.Object {
   def hasWriteErrors(): Boolean = js.native
 
 }
-
-/**
-  * Bulk Write Result Singleton
-  * @author lawrence.daniels@gmail.com
-  */
-@js.native
-@JSName("BulkWriteResult")
-object BulkWriteResult extends BulkWriteResultClass

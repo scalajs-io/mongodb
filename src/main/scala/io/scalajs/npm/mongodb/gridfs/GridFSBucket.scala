@@ -1,9 +1,11 @@
 package io.scalajs.npm.mongodb.gridfs
 
+import io.scalajs.RawOptions
 import io.scalajs.npm.mongodb.{Cursor, Db}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
+import scala.scalajs.js.|
 
 /**
   * GridFS Bucket
@@ -47,7 +49,7 @@ class GridFSBucket() extends js.Object {
     * Convenience wrapper around find on the files collection
     * @example find(filter, options)
     */
-  def find(filter: js.Any, options: GridFSBucketFindOptions = null): Cursor = js.native
+  def find[T](filter: js.Any, options: GridFSBucketFindOptions = js.native): Cursor[T] = js.native
 
   /**
     * Returns a readable stream (GridFSBucketReadStream) for streaming file data from GridFS.
@@ -55,7 +57,8 @@ class GridFSBucket() extends js.Object {
     * @param options the [[DownloadStreamOptions download options]]
     * @example openDownloadStream(id, options)
     */
-  def openDownloadStream(id: js.Any, options: DownloadStreamOptions = null): GridFSBucketReadStream = js.native
+  def openDownloadStream(id: js.Any,
+                         options: DownloadStreamOptions | RawOptions = js.native): GridFSBucketReadStream = js.native
 
   /**
     * Returns a readable stream (GridFSBucketReadStream) for streaming the file with the given name from GridFS.
@@ -65,7 +68,8 @@ class GridFSBucket() extends js.Object {
     * @param options the [[DownloadStreamByNameOptions download options]]
     * @example bucket.openDownloadStreamByName('meistersinger.mp3')
     */
-  def openDownloadStreamByName(file: String, options: DownloadStreamByNameOptions = null): GridFSBucketReadStream =
+  def openDownloadStreamByName(file: String,
+                               options: DownloadStreamByNameOptions | RawOptions = js.native): GridFSBucketReadStream =
     js.native
 
   /**
@@ -75,6 +79,7 @@ class GridFSBucket() extends js.Object {
     * @param options the [[UploadStreamOptions upload options]]
     * @example bucket.openUploadStream('./meistersinger.mp3')
     */
-  def openUploadStream(file: String, options: UploadStreamOptions = null): GridFSBucketWriteStream = js.native
+  def openUploadStream(file: String,
+                       options: UploadStreamOptions | RawOptions = js.native): GridFSBucketWriteStream = js.native
 
 }

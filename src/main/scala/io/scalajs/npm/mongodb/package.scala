@@ -14,6 +14,17 @@ import scala.scalajs.{js, runtime}
 package object mongodb {
 
   /////////////////////////////////////////////////////////////////////////////////
+  //      Type Definitions
+  /////////////////////////////////////////////////////////////////////////////////
+
+  /**
+    * The callback format for results
+    * @param error  An error instance representing the error during the execution.
+    * @param result The bulk write result.
+    */
+  type MongoResultCallback[T] = js.Function2[MongoError, T, Any]
+
+  /////////////////////////////////////////////////////////////////////////////////
   //      Promises and Futures
   /////////////////////////////////////////////////////////////////////////////////
 
@@ -35,27 +46,49 @@ package object mongodb {
   /////////////////////////////////////////////////////////////////////////////////
 
   @inline
-  def deleteMany(filter: js.Any) = doc("deleteMany" -> filter)
+  def deleteMany(filter: js.Any): js.Dictionary[js.Any] = doc("deleteMany" -> filter)
 
   @inline
-  def deleteOne(filter: js.Any) = doc("deleteOne" -> filter)
+  def deleteOne(filter: js.Any): js.Dictionary[js.Any] = doc("deleteOne" -> filter)
 
   @inline
-  def insertOne(document: js.Any) = doc("insertOne" -> document)
+  def insertOne(document: js.Any): js.Dictionary[js.Any] = doc("insertOne" -> document)
 
   @inline
-  def replaceOne(filter: js.Any, replacement: js.Any, upsert: Boolean = false) = {
+  def replaceOne(filter: js.Any, replacement: js.Any, upsert: Boolean = false): js.Dictionary[js.Any] = {
     doc("replaceOne" -> doc("filter" -> filter, "replacement" -> replacement, "upsert" -> upsert))
   }
 
   @inline
-  def updateMany(filter: js.Any, update: js.Any, upsert: Boolean = false) = {
+  def updateMany(filter: js.Any, update: js.Any, upsert: Boolean = false): js.Dictionary[js.Any] = {
     doc("updateMany" -> doc("filter" -> filter, "update" -> update, "upsert" -> upsert))
   }
 
   @inline
-  def updateOne(filter: js.Any, update: js.Any, upsert: Boolean = false) = {
+  def updateOne(filter: js.Any, update: js.Any, upsert: Boolean = false): js.Dictionary[js.Any] = {
     doc("updateOne" -> doc("filter" -> filter, "update" -> update, "upsert" -> upsert))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //      Cursor
+  /////////////////////////////////////////////////////////////////////////////////
+
+  type CursorFlag = String
+  val TAILABLE: CursorFlag = "tailable"
+  val OPLOGREPLAY: CursorFlag = "oplogReplay"
+  val NOCURSORTIMEOUT: CursorFlag = "noCursorTimeout"
+  val AWAITDATA: CursorFlag = "awaitData"
+  val PARTIAL: CursorFlag = "partial"
+
+  /**
+    * Cursor Extensions
+    * @author lawrence.daniels@gmail.com
+    */
+  implicit class CursorExtensions[T](val cursor: Cursor[T]) extends AnyVal {
+
+    @inline
+    def onOnce(callback: js.Function): cursor.type = cursor.on("once", callback)
+
   }
 
   /////////////////////////////////////////////////////////////////////////////////

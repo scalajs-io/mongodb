@@ -8,7 +8,8 @@ import scala.scalajs.js.annotation.JSName
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-trait UnorderedBulkOperation extends js.Object {
+@JSName("UnorderedBulkOperation")
+class UnorderedBulkOperation() extends js.Object {
 
   /**
     * Execute the ordered bulk operation
@@ -35,7 +36,3 @@ trait UnorderedBulkOperation extends js.Object {
   def insert(doc: js.Any): Unit = js.native
 
 }
-
-@js.native
-@JSName("UnorderedBulkOperation")
-object UnorderedBulkOperation extends UnorderedBulkOperationClass

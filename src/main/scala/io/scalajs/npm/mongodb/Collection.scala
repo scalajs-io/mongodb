@@ -1,7 +1,11 @@
 package io.scalajs.npm.mongodb
 
-import scala.concurrent.ExecutionContext
+import io.scalajs.RawOptions
+import io.scalajs.util.PromiseHelper._
+
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.scalajs.js
+import scala.scalajs.js.|
 
 /**
   * Mongo Collection
@@ -20,7 +24,7 @@ trait Collection extends js.Object {
     */
   def aggregate[B <: js.Any](pipeline: js.Array[_ <: js.Any],
                              options: AggregationOptions,
-                             callback: js.Function2[MongoError, js.Array[B], Any]): Unit = js.native
+                             callback: MongoResultCallback[js.Array[B]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
@@ -29,14 +33,15 @@ trait Collection extends js.Object {
     * @example aggregate(pipeline, options, callback)
     */
   def aggregate[B <: js.Any](pipeline: js.Array[_ <: js.Any],
-                             callback: js.Function2[MongoError, js.Array[B], Any]): Unit = js.native
+                             callback: MongoResultCallback[js.Array[B]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
     * @param pipeline Array containing all the aggregation framework commands for the execution.
     * @example aggregate(pipeline, options, callback)
     */
-  def aggregate[A <: js.Any](pipeline: js.Array[A], options: AggregationOptions = null): AggregationCursor = js.native
+  def aggregate[A <: js.Any](pipeline: js.Array[_ <: js.Any],
+                             options: AggregationOptions | RawOptions = js.native): AggregationCursor[A] = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -46,8 +51,8 @@ trait Collection extends js.Object {
     * @example bulkWrite(operations, options, callback)
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
-                             options: js.Any,
-                             callback: js.Function2[MongoError, BulkWriteOpResultObject, Any]): Unit = js.native
+                             options: RawOptions,
+                             callback: MongoResultCallback[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -56,7 +61,7 @@ trait Collection extends js.Object {
     * @example bulkWrite(operations, options, callback)
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
-                             callback: js.Function2[MongoError, BulkWriteOpResultObject, Any]): Unit = js.native
+                             callback: MongoResultCallback[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -64,7 +69,8 @@ trait Collection extends js.Object {
     * @param options    Optional settings.
     * @example bulkWrite(operations, options, callback)
     */
-  def bulkWrite(operations: js.Array[js.Any], options: js.Any = null): js.Promise[BulkWriteOpResultObject] = js.native
+  def bulkWrite(operations: js.Array[js.Any],
+                options: RawOptions = js.native): js.Promise[BulkWriteOpResultObject] = js.native
 
   /**
     * Count number of matching documents in the db to a query.
@@ -73,7 +79,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example count(query, options, callback)
     */
-  def count(query: js.Any, options: js.Any, callback: js.Function2[MongoError, Int, Any]): Unit = js.native
+  def count(query: js.Any, options: RawOptions, callback: js.Function2[MongoError, Int, Any]): Unit = js.native
 
   /**
     * Count number of matching documents in the db to a query.
@@ -81,7 +87,7 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example count(query, options, callback)
     */
-  def count(query: js.Any, options: js.Any = null): js.Promise[Int] = js.native
+  def count(query: js.Any, options: RawOptions = null): js.Promise[Int] = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -90,8 +96,9 @@ trait Collection extends js.Object {
     * @param callback    The command result callback
     * @example createIndex(fieldOrSpec, options[, callback])
     */
-  def createIndex(fieldOrSpec: js.Any, options: IndexOptions, callback: js.Function2[MongoError, String, Any]): Unit =
-    js.native
+  def createIndex(fieldOrSpec: js.Any,
+                  options: IndexOptions | RawOptions,
+                  callback: js.Function2[MongoError, String, Any]): Unit = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -107,7 +114,8 @@ trait Collection extends js.Object {
     * @param options     Optional settings.
     * @example createIndex(fieldOrSpec, options[, callback])
     */
-  def createIndex(fieldOrSpec: js.Any, options: IndexOptions = null): js.Promise[String] = js.native
+  def createIndex(fieldOrSpec: js.Any,
+                  options: IndexOptions | RawOptions = js.native): js.Promise[String] = js.native
 
   /**
     * Creates multiple indexes in the collection, this method is only supported for MongoDB 2.6 or higher.
@@ -128,7 +136,7 @@ trait Collection extends js.Object {
     */
   def deleteMany(filter: js.Any,
                  options: DeleteOptions,
-                 callback: js.Function2[MongoError, DeleteWriteOpResult, Any]): Unit = js.native
+                 callback: MongoResultCallback[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -136,7 +144,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example deleteMany(filter, options, callback)
     */
-  def deleteMany(filter: js.Any, callback: js.Function2[MongoError, DeleteWriteOpResult, Any]): Unit = js.native
+  def deleteMany(filter: js.Any, callback: MongoResultCallback[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -144,7 +152,8 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example deleteMany(filter, options, callback)
     */
-  def deleteMany(filter: js.Any, options: DeleteOptions = null): js.Promise[DeleteWriteOpResult] = js.native
+  def deleteMany(filter: js.Any,
+                 options: DeleteOptions | RawOptions = js.native): js.Promise[DeleteWriteOpResult] = js.native
 
   /**
     * Delete a document on MongoDB
@@ -152,7 +161,7 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     * @param callback The command result callback
     */
-  def deleteOne(filter: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def deleteOne(filter: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Delete a document on MongoDB
@@ -166,7 +175,7 @@ trait Collection extends js.Object {
     * @param filter  The Filter used to select the document to remove
     * @param options Optional settings.
     */
-  def deleteOne(filter: js.Any, options: js.Any = null): js.Promise[DeleteWriteOpResult] = js.native
+  def deleteOne(filter: js.Any, options: RawOptions = js.native): js.Promise[DeleteWriteOpResult] = js.native
 
   /**
     * The distinct command returns returns a list of distinct values for the given key across a collection.
@@ -176,14 +185,14 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example distinct(key, query, options, callback)
     */
-  def distinct(key: js.Any, query: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def distinct(key: js.Any, query: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Drop the collection from the database, removing it permanently. New accesses will create a new collection.
     * @param callback The command result callback
     * @example drop(callback)
     */
-  def drop(callback: js.Function): Unit = js.native
+  def drop(callback: js.Function1[MongoError, Any]): Unit = js.native
 
   /**
     * Drop the collection from the database, removing it permanently. New accesses will create a new collection.
@@ -206,7 +215,7 @@ trait Collection extends js.Object {
     * @param callback  The command result callback
     * @example dropIndex(indexName, options, callback)
     */
-  def dropIndex(indexName: String, options: js.Any, callback: js.Function): Unit = js.native
+  def dropIndex(indexName: String, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Drops all indexes from this collection.
@@ -222,25 +231,34 @@ trait Collection extends js.Object {
     * @param callback    The command result callback
     * @example ensureIndex(fieldOrSpec, options, callback)
     */
-  def ensureIndex(fieldOrSpec: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def ensureIndex(fieldOrSpec: js.Any, options: IndexOptions | RawOptions, callback: js.Function): Unit = js.native
+
+  /**
+    * Ensures that an index exists, if it does not it creates it
+    * @param fieldOrSpec Defines the index.
+    * @param options     Optional settings.
+    * @return ????
+    * @example ensureIndex(fieldOrSpec, options)
+    */
+  def ensureIndex(fieldOrSpec: js.Any, options: IndexOptions | RawOptions): js.Promise[js.Any] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find(): Cursor = js.native
+  def find[T](): Cursor[T] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find(selector: js.Any): Cursor = js.native
+  def find[T](selector: js.Any): Cursor[T] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find(selector: js.Any, projection: js.Any): Cursor = js.native
+  def find[T](selector: js.Any, projection: js.Any): Cursor[T] = js.native
 
   /**
     * Find and update a document.
@@ -251,8 +269,8 @@ trait Collection extends js.Object {
     * @example findAndModify(query, sort, doc, options, callback)
     */
   @deprecated("Use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead", since = "2.0")
-  def findAndModify(query: js.Any, sort: js.Array[js.Any], doc: js.Any, options: js.Any, callback: js.Function): Unit =
-    js.native
+  def findAndModify(query: js.Any, sort: js.Array[js.Any], doc: js.Any, options: RawOptions, callback: js.Function): Unit =
+  js.native
 
   /**
     * Find and update a document.
@@ -275,7 +293,7 @@ trait Collection extends js.Object {
   def findAndModify[T <: js.Any](query: js.Any,
                                  sort: js.Array[js.Any],
                                  doc: js.Any,
-                                 options: js.Any = null): js.Promise[T] = js.native
+                                 options: RawOptions = null): js.Promise[T] = js.native
 
   /**
     * Find and remove a document.
@@ -285,7 +303,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example findAndRemove(query, sort, options, callback)
     */
-  def findAndRemove(query: js.Any, sort: js.Array[js.Any], options: js.Any, callback: js.Function): Unit = js.native
+  def findAndRemove(query: js.Any, sort: js.Array[js.Any], options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Find and remove a document.
@@ -294,7 +312,7 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example findAndRemove(query, sort, options, callback)
     */
-  def findAndRemove[T](query: js.Any, sort: js.Array[js.Any], options: js.Any): js.Promise[T] = js.native
+  def findAndRemove[T](query: js.Any, sort: js.Array[js.Any], options: RawOptions): js.Promise[T] = js.native
 
   /**
     * Fetches the first document that matches the query
@@ -305,7 +323,7 @@ trait Collection extends js.Object {
     * @example findOne(query[, options], callback)
     */
   @deprecated("Use find().limit(1).next(function(err, doc){})", since = "2.0")
-  def findOne(query: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def findOne(query: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Fetches the first document that matches the query
@@ -324,7 +342,7 @@ trait Collection extends js.Object {
     * @example findOne(query[, options], callback)
     */
   @deprecated("Use find().limit(1).next(function(err, doc){})", since = "2.0")
-  def findOne[T <: js.Any](query: js.Any, options: js.Any = null): js.Promise[T] = js.native
+  def findOne[T <: js.Any](query: js.Any, options: RawOptions = null): js.Promise[T] = js.native
 
   /**
     * Find a document and delete it in one atomic operation, requires a write lock for the duration of the operation.
@@ -333,7 +351,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example findOneAndDelete(filter[, options], callback)
     */
-  def findOneAndDelete(filter: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def findOneAndDelete(filter: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Find a document and delete it in one atomic operation, requires a write lock for the duration of the operation.
@@ -351,7 +369,7 @@ trait Collection extends js.Object {
     * @param callback    The command result callback
     * @example findOneAndReplace(filter, replacement, options, callback)
     */
-  def findOneAndReplace(filter: js.Any, replacement: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def findOneAndReplace(filter: js.Any, replacement: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Find a document and update it in one atomic operation, requires a write lock for the duration of the operation.
@@ -391,7 +409,7 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     * @param callback The command result callback
     */
-  def geoHaystackSearch(x: Double, y: Double, options: js.Any, callback: js.Function): Unit = js.native
+  def geoHaystackSearch(x: Double, y: Double, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Execute the geoNear command to search for items in the collection
@@ -400,7 +418,7 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     * @param callback The command result callback
     */
-  def geoNear(x: Double, y: Double, options: js.Any, callback: js.Function): Unit = js.native
+  def geoNear(x: Double, y: Double, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     *
@@ -420,7 +438,7 @@ trait Collection extends js.Object {
             reduce: js.Any,
             finalize: js.Any,
             command: js.Any,
-            options: js.Any,
+            options: RawOptions,
             callback: js.Function): Unit = js.native
 
   /**
@@ -437,7 +455,7 @@ trait Collection extends js.Object {
     * @example indexExists(indexes, callback)
     * @return Promise if no callback passed
     */
-  def indexExists(indexes: js.Array[String], callback: js.Function2[MongoError, Boolean, Any]): Unit = js.native
+  def indexExists(indexes: js.Array[String], callback: MongoResultCallback[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
@@ -454,7 +472,7 @@ trait Collection extends js.Object {
     * @example indexExists(indexes, callback)
     * @return Promise if no callback passed
     */
-  def indexExists(indexes: String, callback: js.Function2[MongoError, Boolean, Any]): Unit = js.native
+  def indexExists(indexes: String, callback: MongoResultCallback[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
@@ -470,7 +488,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example indexInformation(options, callback)
     */
-  def indexInformation(options: js.Any, callback: js.Function): Unit = js.native
+  def indexInformation(options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Initiate an In order bulk write operation, operations will be serially executed in the order they are added,
@@ -479,7 +497,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example initializeOrderedBulkOp(options, callback)
     */
-  def initializeOrderedBulkOp(options: js.Any, callback: js.Function): Unit = js.native
+  def initializeOrderedBulkOp(options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Initiate a Out of order batch write operation. All operations will be buffered into insert/update/remove
@@ -487,7 +505,7 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example initializeUnorderedBulkOp(options)
     */
-  def initializeUnorderedBulkOp(options: js.Any): Unit = js.native
+  def initializeUnorderedBulkOp(options: RawOptions = js.native): Unit = js.native
 
   /**
     * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain
@@ -503,7 +521,7 @@ trait Collection extends js.Object {
     * This behavior can be overridden by setting the forceServerObjectId flag.
     * @param doc Document to insert.
     */
-  def insert(doc: js.Any, callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit = js.native
+  def insert(doc: js.Any, callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain
@@ -512,8 +530,8 @@ trait Collection extends js.Object {
     * @param doc      Document to insert.
     * @param callback The command result callback
     */
-  def insert(doc: js.Any, options: WriteOptions, callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit =
-    js.native
+  def insert(doc: js.Any, options: WriteOptions | RawOptions,
+             callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -525,8 +543,8 @@ trait Collection extends js.Object {
     */
   @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
   def insert[T <: js.Any](docs: js.Array[T],
-                          options: WriteOptions,
-                          callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit = js.native
+                          options: WriteOptions | RawOptions,
+                          callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -538,8 +556,8 @@ trait Collection extends js.Object {
     * @example insertMany(docs, options, callback): Promise
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
-                              options: WriteOptions,
-                              callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit = js.native
+                              options: WriteOptions | RawOptions,
+                              callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -549,8 +567,8 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example insertMany(docs, options, callback): Promise
     */
-  def insertMany[T <: js.Any](docs: js.Array[T], callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit =
-    js.native
+  def insertMany[T <: js.Any](docs: js.Array[T],
+                              callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -560,8 +578,8 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example insertMany(docs, options, callback): Promise
     */
-  def insertMany[T <: js.Any](docs: js.Array[T], options: WriteOptions = null): js.Promise[InsertWriteOpResult] =
-    js.native
+  def insertMany[T <: js.Any](docs: js.Array[T],
+                              options: WriteOptions | RawOptions = js.native): js.Promise[InsertWriteOpResult] = js.native
 
   /**
     * Inserts a single document into MongoDB. If documents passed in do not contain the _id field, one will be added
@@ -572,8 +590,8 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     */
   def insertOne(doc: js.Any,
-                options: WriteOptions,
-                callback: js.Function2[MongoError, InsertWriteOpResult, Any]): Unit = js.native
+                options: WriteOptions | RawOptions,
+                callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Returns if the collection is a capped collection
@@ -586,13 +604,13 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example isCapped(callback): Promise
     */
-  def isCapped(callback: js.Function2[MongoError, Boolean, Any]): Unit = js.native
+  def isCapped(callback: MongoResultCallback[Boolean]): Unit = js.native
 
   /**
     * Get the list of all indexes information for the collection.
     * @param options Optional settings.
     */
-  def listIndexes(options: js.Any): Unit = js.native
+  def listIndexes(options: RawOptions): Unit = js.native
 
   /**
     * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
@@ -602,7 +620,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback.
     * @return [[js.Promise]] if no callback passed
     */
-  def mapReduce(map: js.Function, reduce: js.Function, options: js.Any, callback: js.Function): Unit = js.native
+  def mapReduce(map: js.Function, reduce: js.Function, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
@@ -612,7 +630,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback.
     * @return [[js.Promise]] if no callback passed
     */
-  def mapReduce(map: js.Function, reduce: String, options: js.Any, callback: js.Function): Unit = js.native
+  def mapReduce(map: js.Function, reduce: String, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
@@ -622,7 +640,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback.
     * @return [[js.Promise]] if no callback passed
     */
-  def mapReduce(map: String, reduce: js.Function, options: js.Any, callback: js.Function): Unit = js.native
+  def mapReduce(map: String, reduce: js.Function, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Run Map Reduce across a collection. Be aware that the inline option for out will return an array of results not a collection.
@@ -632,7 +650,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback.
     * @return [[js.Promise]] if no callback passed
     */
-  def mapReduce(map: String, reduce: String, options: js.Any, callback: js.Function): Unit = js.native
+  def mapReduce(map: String, reduce: String, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Returns the options of the collection.
@@ -654,7 +672,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback.
     * @return N number of parallel cursors for a collection allowing parallel reading of entire collection.
     */
-  def parallelCollectionScan(options: js.Any, callback: js.Function): Unit = js.native
+  def parallelCollectionScan(options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Reindex all indexes on the collection Warning: reIndex is a blocking operation
@@ -694,7 +712,7 @@ trait Collection extends js.Object {
     * @param callback The results callback
     * @return [[js.Promise]] if no callback passed
     */
-  def rename(newName: String, options: js.Any, callback: js.Function): Unit = js.native
+  def rename(newName: String, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Rename the collection.
@@ -702,7 +720,7 @@ trait Collection extends js.Object {
     * @param options Optional settings.k
     * @return [[js.Promise]] if no callback passed
     */
-  def rename[T <: js.Any](newName: String, options: js.Any): js.Promise[T] = js.native
+  def rename[T <: js.Any](newName: String, options: RawOptions): js.Promise[T] = js.native
 
   /**
     * Replace a document on MongoDB
@@ -711,7 +729,7 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     * @param callback The results callback
     */
-  def replaceOne(filter: js.Any, doc: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def replaceOne(filter: js.Any, doc: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Replace a document on MongoDB
@@ -727,7 +745,9 @@ trait Collection extends js.Object {
     * @param doc     The Document that replaces the matching document
     * @param options Optional settings.
     */
-  def replaceOne[T <: js.Any](filter: js.Any, doc: js.Any, options: js.Any = null): js.Promise[T] = js.native
+  def replaceOne[T <: js.Any](filter: js.Any,
+                              doc: js.Any,
+                              options: RawOptions = js.native): js.Promise[T] = js.native
 
   /**
     * Save a document. Simple full document replacement function. Not recommended for efficiency, use atomic operators
@@ -737,7 +757,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     */
   @deprecated("Use insertOne, insertMany, updateOne or updateMany", since = "2.0")
-  def save(doc: js.Any, options: js.Any, callback: js.Function): Unit = js.native
+  def save(doc: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Save a document. Simple full document replacement function. Not recommended for efficiency, use atomic operators
@@ -755,14 +775,14 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     */
   @deprecated("Use insertOne, insertMany, updateOne or updateMany", since = "2.0")
-  def save(doc: js.Any, options: js.Any = null): Unit = js.native
+  def save(doc: js.Any, options: RawOptions | RawOptions = js.native): Unit = js.native
 
   /**
     * Get all the collection statistics.
     * @param options  Optional settings.
     * @param callback The command result callback
     */
-  def stats(options: js.Any, callback: js.Function): Unit = js.native
+  def stats(options: RawOptions, callback: js.Function): Unit = js.native
 
   /**
     * Get all the collection statistics.
@@ -774,7 +794,7 @@ trait Collection extends js.Object {
     * Get all the collection statistics.
     * @param options Optional settings.
     */
-  def stats[T <: js.Any](options: js.Any = null): js.Promise[T] = js.native
+  def stats[T <: js.Any](options: RawOptions = js.native): js.Promise[T] = js.native
 
   /**
     * Updates documents.
@@ -786,7 +806,7 @@ trait Collection extends js.Object {
   @deprecated("Use updateOne, updateMany or bulkWrite", since = "2.0")
   def update(selector: js.Any,
              document: js.Any,
-             options: WriteOptions,
+             options: WriteOptions | RawOptions,
              callback: js.Function2[MongoError, UpdateWriteOpResultObject, Any]): Unit = js.native
 
   /**
@@ -815,8 +835,9 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     */
   @deprecated("Use updateOne, updateMany or bulkWrite", since = "2.0")
-  def update(selector: js.Any, document: js.Any, options: WriteOptions = null): js.Promise[UpdateWriteOpResultObject] =
-    js.native
+  def update(selector: js.Any,
+             document: js.Any,
+             options: WriteOptions | RawOptions = js.native): js.Promise[UpdateWriteOpResultObject] = js.native
 
   /**
     * Update multiple documents on MongoDB
@@ -827,7 +848,7 @@ trait Collection extends js.Object {
     */
   def updateMany(filter: js.Any,
                  update: js.Any,
-                 options: UpdateOptions,
+                 options: UpdateOptions | RawOptions,
                  callback: js.Function2[MongoError, UpdateWriteOpResultObject, Any]): Unit = js.native
 
   /**
@@ -837,7 +858,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     */
   def updateMany(filter: js.Any,
-                 update: UpdateOptions,
+                 update: UpdateOptions | RawOptions,
                  callback: js.Function2[MongoError, UpdateWriteOpResultObject, Any]): Unit = js.native
 
   /**
@@ -848,7 +869,7 @@ trait Collection extends js.Object {
     */
   def updateMany(filter: js.Any,
                  update: js.Any,
-                 options: UpdateOptions = null): js.Promise[UpdateWriteOpResultObject] = js.native
+                 options: UpdateOptions | RawOptions = js.native): js.Promise[UpdateWriteOpResultObject] = js.native
 
   /**
     * Update a single document on MongoDB
@@ -860,7 +881,7 @@ trait Collection extends js.Object {
     */
   def updateOne(filter: js.Any,
                 update: js.Any,
-                options: UpdateOptions,
+                options: UpdateOptions | RawOptions,
                 callback: js.Function2[MongoError, UpdateWriteOpResultObject, Any]): Unit = js.native
 
   /**
@@ -881,8 +902,8 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @return [[js.Promise]] if no callback passed
     */
-  def updateOne(filter: js.Any, update: js.Any, options: UpdateOptions = null): js.Promise[UpdateWriteOpResultObject] =
-    js.native
+  def updateOne(filter: js.Any, update: js.Any,
+                options: UpdateOptions | RawOptions = js.native): js.Promise[UpdateWriteOpResultObject] = js.native
 
 }
 
@@ -891,13 +912,6 @@ trait Collection extends js.Object {
   * @author lawrence.daniels@gmail.com
   */
 object Collection {
-
-  /**
-    * The callback format for results
-    * @param error  An error instance representing the error during the execution.
-    * @param result The bulk write result.
-    */
-  type MongoResultCallBack = js.Function2[MongoError, BulkWriteResult, Any]
 
   /**
     * Mongo Collection Extensions
@@ -910,18 +924,18 @@ object Collection {
       * @param pipeline Array containing all the aggregation framework commands for the execution.
       */
     @inline
-    def aggregateFuture[B <: js.Any](pipeline: js.Array[_ <: js.Any]) = {
-      callbackMongoFuture[js.Array[B]](coll.aggregate(pipeline, _))
+    def aggregateAsync[B <: js.Any](pipeline: js.Array[_ <: js.Any]): Promise[js.Array[B]] = {
+      promiseWithError1[MongoError, js.Array[B]](coll.aggregate(pipeline, _))
     }
 
     @inline
-    def findOneFuture[T <: js.Any](selector: js.Any)(implicit ec: ExecutionContext) = {
-      callbackMongoFuture[T](coll.find(selector).limit(1).next) map (Option(_))
+    def findOneAsync[T <: js.Any](selector: js.Any)(implicit ec: ExecutionContext): Future[Option[T]] = {
+      promiseWithError1[MongoError, T](coll.find(selector).limit(1).next).future map (Option(_))
     }
 
     @inline
-    def findOneFuture[T <: js.Any](selector: js.Any, fields: js.Array[String])(implicit ec: ExecutionContext) = {
-      callbackMongoFuture[T](coll.find(selector, js.Dictionary(fields.map(_ -> 1): _*)).limit(1).next) map (Option(_))
+    def findOneAsync[T <: js.Any](selector: js.Any, fields: js.Array[String])(implicit ec: ExecutionContext): Future[Option[T]] = {
+      promiseWithError1[MongoError, T](coll.find(selector, js.Dictionary(fields.map(_ -> 1): _*)).limit(1).next).future map (Option(_))
     }
 
   }

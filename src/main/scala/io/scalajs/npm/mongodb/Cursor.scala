@@ -1,12 +1,11 @@
 package io.scalajs.npm.mongodb
 
-import io.scalajs.nodejs
-import io.scalajs.npm.mongodb.Cursor.CursorFlag
+import io.scalajs.{RawOptions, nodejs}
 
-import scala.concurrent.Future
+import scala.concurrent.Promise
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSImport
-import scala.scalajs.js.{Array, UndefOr, |}
+import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.|
 
 /**
   * Cursor
@@ -14,8 +13,7 @@ import scala.scalajs.js.{Array, UndefOr, |}
   * @see {{{ https://mongodb.github.io/node-mongodb-native/api-generated/cursor.html }}}
   */
 @js.native
-@JSImport("mongodb", "Cursor")
-class Cursor extends nodejs.stream.Readable {
+trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Add a cursor flag to the cursor
@@ -29,18 +27,26 @@ class Cursor extends nodejs.stream.Readable {
     * @param name  The query modifier (must start with $, such as $orderby etc)
     * @param value The flag boolean value.
     */
-  def addQueryModifier(name: String, value: js.Any): this.type = js.native
+  def addQueryModifier(name: String, value: Boolean): this.type = js.native
 
   /**
     * Sets the batch size parameter of this cursor to the given value.
-    * @param batchSize the new batch size.
-    * @param callback  this optional callback will be called after executing this method. The first parameter will
-    *                  contain an error object when the batchSize given is not a valid number or when the cursor is
-    *                  already closed while the second parameter will contain a reference to this object upon successful
-    *                  execution.
-    * @example batchSize(batchSize[, callback])
+    * @param size the new batch size.
+    * @return a promise of the [[Cursor]]
+    * @example batchSize(size[, callback])
     */
-  def batchSize(batchSize: Int, callback: js.Function = js.native): this.type = js.native
+  def batchSize(size: Int): js.Promise[this.type] = js.native
+
+  /**
+    * Sets the batch size parameter of this cursor to the given value.
+    * @param size     the new batch size.
+    * @param callback this optional callback will be called after executing this method. The first parameter will
+    *                 contain an error object when the batchSize given is not a valid number or when the cursor is
+    *                 already closed while the second parameter will contain a reference to this object upon successful
+    *                 execution.
+    * @example batchSize(size[, callback])
+    */
+  def batchSize(size: Int, callback: MongoResultCallback[this.type]): Unit = js.native
 
   /**
     * Clone the cursor
@@ -48,17 +54,42 @@ class Cursor extends nodejs.stream.Readable {
   override def clone(): this.type = js.native
 
   /**
-    * Close the cursor.
+    * Close the cursor, sending a KillCursor command and emitting close.
+    * @return a promise of the [[Cursor]]
+    */
+  def close(): Promise[this.type] = js.native
+
+  /**
+    * Close the cursor, sending a KillCursor command and emitting close.
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
     */
-  override def close(callback: js.Function): Unit = js.native
+  def close(callback: MongoResultCallback[this.type]): Unit = js.native
+
+  /**
+    * Set the collation options for the cursor.
+    * @param value the cursor collation options (MongoDB 3.4 or higher) settings for update operation
+    *              (see 3.4 documentation for available fields).
+    * @return the [[Cursor]]
+    */
+  def collation(value: js.Any): this.type = js.native
 
   /**
     * Add a comment to the cursor query allowing for tracking the comment in the log.
     * @param value The comment attached to this query.
+    * @return the [[Cursor]]
     */
   def comment(value: String): this.type = js.native
+
+  /**
+    * Determines how many result the query for this cursor will return
+    * @param applySkipLimit if set to true will apply the skip and limits set on the cursor. Defaults to false.
+    * @param options        the optional settings.
+    * @return a promise of the count
+    * @example count(applySkipLimit, [options])
+    */
+  def count(applySkipLimit: Boolean = js.native,
+            options: CountOptions | RawOptions = js.native): Promise[Int] = js.native
 
   /**
     * Determines how many result the query for this cursor will return
@@ -66,9 +97,22 @@ class Cursor extends nodejs.stream.Readable {
     * @param callback       this will be called after executing this method. The first parameter will contain the Error
     *                       object if an error occurred, or null otherwise. While the second parameter will contain the
     *                       number of results or null if an error occurred.
-    * @example count(applySkipLimit, callback)
+    * @param options        the optional settings.
+    * @example count(applySkipLimit, [options], callback)
     */
-  def count(applySkipLimit: Boolean, callback: js.Function): Unit = js.native
+  def count(applySkipLimit: Boolean,
+            options: CountOptions | RawOptions,
+            callback: MongoResultCallback[Int]): Unit = js.native
+
+  /**
+    * Determines how many result the query for this cursor will return
+    * @param applySkipLimit if set to true will apply the skip and limits set on the cursor. Defaults to false.
+    * @param callback       this will be called after executing this method. The first parameter will contain the Error
+    *                       object if an error occurred, or null otherwise. While the second parameter will contain the
+    *                       number of results or null if an error occurred.
+    * @example count(applySkipLimit, [options], callback)
+    */
+  def count(applySkipLimit: Boolean, callback: MongoResultCallback[Int]): Unit = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -80,7 +124,8 @@ class Cursor extends nodejs.stream.Readable {
     *                 will contain the Error object if an error occurred, or null otherwise. While the second parameter
     *                 will contain the document.
     */
-  def each(callback: js.Function): Unit = js.native
+  @deprecated(message = "No alternatives specified", since = "2.2")
+  def each(callback: MongoResultCallback[T]): Unit = js.native
 
   /**
     * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
@@ -101,7 +146,7 @@ class Cursor extends nodejs.stream.Readable {
     * @param iterator The iteration callback.
     * @param callback The end callback.
     */
-  def forEach[T <: js.Any](iterator: js.Function1[T, Any], callback: js.Function1[MongoError, Any]): Unit = js.native
+  def forEach(iterator: js.Function1[T, Any], callback: MongoResultCallback[T]): Unit = js.native
 
   /**
     * Set the cursor hint
@@ -181,22 +226,21 @@ class Cursor extends nodejs.stream.Readable {
     * Get the next available document from the cursor, returns null if no more documents are available.
     * @return [[js.Promise promise]] if no callback passed
     */
-  def next[T <: js.Any](): js.Promise[T] = js.native
+  def next(): js.Promise[T] = js.native
 
   /**
     * Gets the next document from the cursor.
     * @param callback The result callback.
     * @return [[js.Promise promise]] if no callback passed
     */
-  @deprecated("Use next() instead", since = "2.0")
-  def nextObject(callback: js.Function): Unit = js.native
+  def nextObject(callback: MongoResultCallback[T]): Unit = js.native
 
   /**
     * Gets the next document from the cursor.
     * @return [[js.Promise promise]] if no callback passed
     */
   @deprecated("Use next() instead", since = "2.0")
-  def nextObject[T <: js.Any](): js.Promise[T] = js.native
+  def nextObject(): js.Promise[T] = js.native
 
   /**
     * Sets a field projection for the query.
@@ -316,7 +360,7 @@ class Cursor extends nodejs.stream.Readable {
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
     */
-  def toArray(callback: js.Function): Unit = js.native
+  def toArray(callback: MongoResultCallback[js.Array[T]]): Unit = js.native
 
 }
 
@@ -324,128 +368,43 @@ class Cursor extends nodejs.stream.Readable {
   * Cursor Companion
   * @author lawrence.daniels@gmail.com
   */
-object Cursor {
+@js.native
+@JSImport("mongodb", "Cursor")
+object Cursor extends js.Object {
 
-  type CursorFlag = String
-  val TAILABLE: CursorFlag = "tailable"
-  val OPLOGREPLAY: CursorFlag = "oplogReplay"
-  val NOCURSORTIMEOUT: CursorFlag = "noCursorTimeout"
-  val AWAITDATA: CursorFlag = "awaitData"
-  val PARTIAL: CursorFlag = "partial"
+  /////////////////////////////////////////////////////////////////////////////////
+  //      Constants
+  /////////////////////////////////////////////////////////////////////////////////
+
+  val INIT: Int = js.native
+  val OPEN: Int = js.native
+  val CLOSED: Int = js.native
+  val GET_MORE: Int = js.native
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //      Static Methods
+  /////////////////////////////////////////////////////////////////////////////////
 
   /**
-    * Cursor Extensions
-    * @author lawrence.daniels@gmail.com
+    * Clones a given cursor but uses new options
+    * @example Cursor.cloneWithOptions(cursor)
     */
-  implicit class CursorExtensions(val cursor: Cursor) extends AnyVal {
-
-    /**
-      * Sets the batch size parameter of this cursor to the given value.
-      * @param batchSize the new batch size.
-      */
-    @inline
-    def batchSizeFuture(batchSize: Int): Future[Cursor] = callbackMongoFuture[Cursor](cursor.batchSize(batchSize, _))
-
-    /**
-      * Close the cursor.
-      */
-    @inline
-    def closeFuture(): Future[Cursor] = callbackMongoFuture[Cursor](cursor.close)
-
-    /**
-      * Determines how many result the query for this cursor will return
-      * @param applySkipLimit if set to true will apply the skip and limits set on the cursor. Defaults to false.
-      */
-    @inline
-    def countFuture(applySkipLimit: Boolean): Future[Cursor] =
-    callbackMongoFuture[Cursor](cursor.count(applySkipLimit, _))
-
-    /**
-      * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
-      * iterated if this cursor had been previouly accessed. In that case, {cursor.rewind} can be used to reset the
-      * cursor. However, unlike {cursor.toArray}, the cursor will only hold a maximum of batch size elements at any
-      * given time if batch size is specified. Otherwise, the caller is responsible for making sure that the entire
-      * result can fit the memory.
-      */
-    @inline
-    def eachFuture[T <: js.Any]: Future[UndefOr[T]] = callbackMongoFuture[js.UndefOr[T]](cursor.each)
-
-    /**
-      * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
-      */
-    @inline
-    def explainFuture[T <: js.Any]: Future[T] = callbackMongoFuture[T](cursor.explain)
-
-    /**
-      * Sets the limit parameter of this cursor to the given value.
-      * @param limit the new limit.
-      */
-    @inline
-    def limitFuture(limit: Int): Future[Cursor] = callbackMongoFuture[Cursor](cursor.limit(limit, _))
-
-    /**
-      * Specifies a time limit for a query operation. After the specified time is exceeded, the operation will be
-      * aborted and an error will be returned to the client. If maxTimeMS is null, no limit is applied.
-      * @param maxTimeMS the maxTimeMS for the query.
-      */
-    @inline
-    def maxTimeMSFuture(maxTimeMS: Int): Future[Cursor] = callbackMongoFuture[Cursor](cursor.maxTimeMS(maxTimeMS, _))
-
-    /**
-      * Gets the next document from the cursor.
-      */
-    @inline
-    def nextFuture[T <: js.Any]: Future[UndefOr[T]] = callbackMongoFuture[js.UndefOr[T]](cursor.next)
-
-    @inline
-    def onOnce(callback: js.Function): cursor.type = cursor.on("once", callback)
-
-    /**
-      * Sets the read preference for the cursor
-      * @param pref read preference for the cursor, one of [[Server.READ_PRIMARY Server.READ_PRIMARY]],
-      *             [[Server.READ_SECONDARY Server.READ_SECONDARY]], [[Server.READ_SECONDARY Server.READ_SECONDARY_ONLY]]
-      */
-    @inline
-    def setReadPreferenceFuture(pref: String): Future[Cursor] =
-    callbackMongoFuture[Cursor](cursor.setReadPreference(pref, _))
-
-    /**
-      * Sets the skip parameter of this cursor to the given value.
-      * @param skip the new skip value.
-      */
-    @inline
-    def skipFuture(skip: Int): Future[Cursor] = callbackMongoFuture[Cursor](cursor.skip(skip, _))
-
-    /**
-      * Sets the sort parameter of this cursor to the given value.
-      * @param list this can be a string or an array. If passed as a string, the string will be the field to sort.
-      *             If passed an array, each element will represent a field to be sorted and should be an array that
-      *             contains the format [string, direction].
-      */
-    @inline
-    def sortFuture(list: js.Array[js.Any]): Future[Cursor] = callbackMongoFuture[Cursor](cursor.sort(list, _))
-
-    /**
-      * Sets the sort parameter of this cursor to the given value.
-      * @param key       this can be a string or an array. If passed as a string, the string will be the field to sort.
-      *                  If passed an array, each element will represent a field to be sorted and should be an array that
-      *                  contains the format [string, direction].
-      * @param direction this determines how the results are sorted. "asc", "ascending" or 1 for
-      *                  ascending order while "desc", "descending or -1 for descending order.
-      *                  <b>Note</b> that the strings are case insensitive.
-      */
-    @inline
-    def sortFuture(key: String, direction: Int | String): Future[Cursor] =
-    callbackMongoFuture[Cursor](cursor.sort(key, direction, _))
-
-    /**
-      * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
-      * the results. Note that the array only contain partial results when this cursor had been previouly accessed.
-      * In that case, cursor.rewind() can be used to reset the cursor.
-      */
-    @inline
-    def toArrayFuture[T <: js.Any]: Future[Array[T]] = callbackMongoFuture[js.Array[T]](cursor.toArray)
-
-  }
+  def cloneWithOptions[T](cursor: Cursor[T]): CursorOptions = js.native
 
 }
+
+/**
+  * Count Options
+  * @param skip           The number of documents to skip.
+  * @param limit          The maximum amounts to count before aborting.
+  * @param maxTimeMS      Number of miliseconds to wait before aborting the query.
+  * @param hint           An index name hint for the query.
+  * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
+  *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
+  */
+@ScalaJSDefined
+class CountOptions(val skip: js.UndefOr[Int] = js.undefined,
+                   val limit: js.UndefOr[Int] = js.undefined,
+                   val maxTimeMS: js.UndefOr[Int] = js.undefined,
+                   val hint: js.UndefOr[String] = js.undefined,
+                   val readPreference: js.UndefOr[ReadPreference | String] = js.undefined) extends js.Object

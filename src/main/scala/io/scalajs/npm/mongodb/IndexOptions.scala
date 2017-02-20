@@ -24,16 +24,16 @@ import scala.scalajs.js.annotation.ScalaJSDefined
   * @author lawrence.daniels@gmail.com
   */
 @ScalaJSDefined
-class IndexOptions(var w: js.Any = null,
-                   var wtimeout: Integer = null,
-                   var j: Boolean = false,
-                   var unique: Boolean = false,
-                   var sparse: Boolean = false,
-                   var background: Boolean = false,
-                   var dropDups: Boolean = false,
-                   var min: Integer = null,
-                   var max: Integer = null,
-                   var v: Integer = null,
-                   var expireAfterSeconds: Integer = null,
-                   var name: Integer = null)
-    extends js.Object
+class IndexOptions(var w: js.UndefOr[Int] = js.undefined,
+                   var wtimeout: js.UndefOr[Int] = js.undefined,
+                   var j: js.UndefOr[Boolean] = js.undefined,
+                   var unique: js.UndefOr[Boolean] = js.undefined,
+                   var sparse: js.UndefOr[Boolean] = js.undefined,
+                   var background: js.UndefOr[Boolean] = js.undefined,
+                   var dropDups: js.UndefOr[Boolean] = js.undefined,
+                   var min: js.UndefOr[Int] = js.undefined,
+                   var max: js.UndefOr[Int] = js.undefined,
+                   var v: js.UndefOr[Int] = js.undefined,
+                   var expireAfterSeconds: js.UndefOr[Int] = js.undefined,
+                   var name: js.UndefOr[Int] = js.undefined)
+  extends js.Object
