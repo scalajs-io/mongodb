@@ -5,6 +5,7 @@ import io.scalajs.util.PromiseHelper._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.scalajs.js
+import scala.scalajs.js.annotation.ScalaJSDefined
 import scala.scalajs.js.|
 
 /**
@@ -720,7 +721,7 @@ trait Collection extends js.Object {
     * @param options Optional settings.k
     * @return [[js.Promise]] if no callback passed
     */
-  def rename[T <: js.Any](newName: String, options: RawOptions): js.Promise[T] = js.native
+  def rename[T <: js.Any](newName: String, options: RenameOptions | RawOptions): js.Promise[T] = js.native
 
   /**
     * Replace a document on MongoDB
@@ -941,3 +942,10 @@ object Collection {
   }
 
 }
+
+/**
+  * Rename Options
+  * @param dropTarget drop the target name collection if it previously exists.
+  */
+@ScalaJSDefined
+class RenameOptions(val dropTarget: js.UndefOr[Boolean] = js.undefined) extends js.Object
