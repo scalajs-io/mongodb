@@ -46,7 +46,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                 execution.
     * @example batchSize(size[, callback])
     */
-  def batchSize(size: Int, callback: MongoResultCallback[this.type]): Unit = js.native
+  def batchSize(size: Int, callback: MongoCallback[this.type]): Unit = js.native
 
   /**
     * Clone the cursor
@@ -64,7 +64,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
     */
-  def close(callback: MongoResultCallback[this.type]): Unit = js.native
+  def close(callback: MongoCallback[this.type]): Unit = js.native
 
   /**
     * Set the collation options for the cursor.
@@ -102,7 +102,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     */
   def count(applySkipLimit: Boolean,
             options: CountOptions | RawOptions,
-            callback: MongoResultCallback[Int]): Unit = js.native
+            callback: MongoCallback[Int]): Unit = js.native
 
   /**
     * Determines how many result the query for this cursor will return
@@ -112,7 +112,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                       number of results or null if an error occurred.
     * @example count(applySkipLimit, [options], callback)
     */
-  def count(applySkipLimit: Boolean, callback: MongoResultCallback[Int]): Unit = js.native
+  def count(applySkipLimit: Boolean, callback: MongoCallback[Int]): Unit = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -125,7 +125,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                 will contain the document.
     */
   @deprecated(message = "No alternatives specified", since = "2.2")
-  def each(callback: MongoResultCallback[T]): Unit = js.native
+  def each(callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
@@ -146,7 +146,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param iterator The iteration callback.
     * @param callback The end callback.
     */
-  def forEach(iterator: js.Function1[T, Any], callback: MongoResultCallback[T]): Unit = js.native
+  def forEach(iterator: js.Function1[T, Any], callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Set the cursor hint
@@ -233,7 +233,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param callback The result callback.
     * @return [[js.Promise promise]] if no callback passed
     */
-  def nextObject(callback: MongoResultCallback[T]): Unit = js.native
+  def nextObject(callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Gets the next document from the cursor.
@@ -360,7 +360,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
     */
-  def toArray(callback: MongoResultCallback[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback[js.Array[T]]): Unit = js.native
 
 }
 

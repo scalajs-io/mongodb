@@ -23,9 +23,8 @@ class CursorTest extends FunSpec with MongoDBTestSupport {
 
       withMongo("Cursor") { db =>
 
+        val  coll = db.collection("cursor_test")
         for {
-          coll <- db.collectionFuture("cursor_test")
-
           // remove any existing docs
           _ <- coll.deleteMany(doc()).toFuture
 
@@ -40,7 +39,7 @@ class CursorTest extends FunSpec with MongoDBTestSupport {
             val promise = Promise[Unit]()
             val cursor = coll.find(doc()).stream(StreamTransform((doc: Sample) => doc.toJson))
             cursor
-              .onData((doc: String) => info(doc))
+              .onData(doc => info(doc.toString))
               .onError(error => promise.failure(new RuntimeException(error.message)))
               .onEnd(() => promise.success(()))
 

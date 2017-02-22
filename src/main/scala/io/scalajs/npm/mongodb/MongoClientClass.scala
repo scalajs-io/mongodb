@@ -10,7 +10,7 @@ import scala.scalajs.js
 @js.native
 trait MongoClientClass extends js.Object {
 
-  def connect(url: String, callback: MongoResultCallback[Db]): Unit = js.native
+  def connect(url: String, callback: MongoCallback[Db]): Unit = js.native
 
 }
 

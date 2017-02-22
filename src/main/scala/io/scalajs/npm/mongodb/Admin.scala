@@ -7,7 +7,7 @@ import scala.scalajs.js
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-trait MongoAdmin extends js.Object {
+trait Admin extends js.Object {
 
   def profilingInfo(callback: js.Function): Unit = js.native
 
@@ -23,13 +23,13 @@ trait MongoAdmin extends js.Object {
   * Mongo Administrative Companion
   * @author lawrence.daniels@gmail.com
   */
-object MongoAdmin {
+object Admin {
 
   /**
     * Mongo Administrative Extensions
     * @author lawrence.daniels@gmail.com
     */
-  implicit class MongoAdminEnrich(val admin: MongoAdmin) extends AnyVal {
+  implicit class MongoAdminEnrich(val admin: Admin) extends AnyVal {
 
     @inline
     def profilingInfoFuture(name: String) = callbackMongoFuture[ProfilingInfo](admin.profilingInfo)

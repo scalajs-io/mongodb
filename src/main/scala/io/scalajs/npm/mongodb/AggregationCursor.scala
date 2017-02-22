@@ -34,7 +34,7 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
     */
-  def close(callback: MongoResultCallback[this.type]): Unit = js.native
+  def close(callback: MongoCallback[this.type]): Unit = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -46,7 +46,7 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 will contain the Error object if an error occurred, or null otherwise. While the second parameter
     *                 will contain the document.
     */
-  def each(callback: MongoResultCallback[T]): Unit = js.native
+  def each(callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
@@ -54,7 +54,7 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 the second parameter will be an object containing the details.
     * @example explain(callback)
     */
-  def explain(callback: MongoResultCallback[js.Any]): Unit = js.native
+  def explain(callback: MongoCallback[js.Any]): Unit = js.native
 
   /**
     * Check if the cursor is closed or open.
@@ -78,6 +78,6 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
     */
-  def toArray(callback: MongoResultCallback[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback[js.Array[T]]): Unit = js.native
 
 }

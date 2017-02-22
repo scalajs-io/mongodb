@@ -22,7 +22,7 @@ package object mongodb {
     * @param error  An error instance representing the error during the execution.
     * @param result The bulk write result.
     */
-  type MongoResultCallback[T] = js.Function2[MongoError, T, Any]
+  type MongoCallback[T] = js.Function2[MongoError, T, Any]
 
   /////////////////////////////////////////////////////////////////////////////////
   //      Promises and Futures

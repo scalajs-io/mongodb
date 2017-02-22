@@ -1,8 +1,6 @@
 package io.scalajs.npm.mongodb
 
 import io.scalajs.nodejs._
-import io.scalajs.npm.mongodb.AggregateTest._
-import io.scalajs.util.JSONHelper._
 import org.scalatest.FunSpec
 
 import scala.concurrent.duration._
@@ -39,11 +37,11 @@ class AggregateTest extends FunSpec with MongoDBTestSupport {
         // if the promise hasn't complete in 1 sec, trigger it.
         setTimeout(() => db.close(), 2.seconds)
 
-        for {
         // get a reference to the 'test' collection
-          coll <- db.collectionFuture("aggregate_test")
+        val coll = db.collection("aggregate_test")
 
-          // remove any existing docs
+        for {
+        // remove any existing docs
           _ <- {
             info("Aggregate: deleting old docs...")
             coll.deleteMany(doc()).toFuture
@@ -55,7 +53,7 @@ class AggregateTest extends FunSpec with MongoDBTestSupport {
             coll.insertMany(docs, new WriteOptions(w = 1)).toFuture
           }
 
-          // Execute aggregate, notice the pipeline is expressed as an Array
+        // Execute aggregate, notice the pipeline is expressed as an Array
         /*
           result <- {
             info("Aggregate: aggregating data...")

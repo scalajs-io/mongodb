@@ -2,6 +2,7 @@ package io.scalajs.npm.mongodb
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
+import scala.scalajs.js.|
 
 /**
   * Document Replacement Options
@@ -12,9 +13,9 @@ import scala.scalajs.js.annotation.ScalaJSDefined
   * @param  bypassDocumentValidation Allow driver to bypass schema validation in MongoDB 3.2 or higher.
   */
 @ScalaJSDefined
-class ReplacementOptions(var upsert: js.UndefOr[Boolean],
-                         var w: js.UndefOr[Int],
-                         var wtimeout: js.UndefOr[Int],
-                         var j: js.UndefOr[Boolean],
-                         var bypassDocumentValidation: js.UndefOr[Boolean])
-    extends js.Object
+class ReplacementOptions(val upsert: js.UndefOr[Boolean] = js.undefined,
+                         val w: js.UndefOr[Int | String] = js.undefined,
+                         val wtimeout: js.UndefOr[Int] = js.undefined,
+                         val j: js.UndefOr[Boolean] = js.undefined,
+                         val bypassDocumentValidation: js.UndefOr[Boolean] = js.undefined)
+  extends js.Object

@@ -2,23 +2,22 @@ package io.scalajs.npm.mongodb
 
 import io.scalajs.RawOptions
 
-import scala.concurrent.Future
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
-import scala.scalajs.js.{Array, |}
+import scala.scalajs.js.|
 
 /**
   * Mongo Database
-  * @author lawrence.daniels@gmail.com
   * @see [[https://mongodb.github.io/node-mongodb-native/api-articles/nodekoarticle1.html]]
+  * @author lawrence.daniels@gmail.com
   */
 @js.native
 @JSImport("mongodb", "Db")
 class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptions) extends js.Object {
 
-  def this() = this(null, null, null)
+  def this() = this(js.native, js.native, js.native)
 
-  def this(databaseName: String, server: Server) = this(databaseName, null, null)
+  def this(databaseName: String, server: Server) = this(databaseName, js.native, js.native)
 
   /////////////////////////////////////////////////////////////////////////////////
   //      Properties
@@ -52,29 +51,342 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   //      Methods
   /////////////////////////////////////////////////////////////////////////////////
 
-  def admin(): MongoAdmin = js.native
+  /**
+    * Add a user to the database.
+    * @param username the username.
+    * @param password the password.
+    * @param options  the optional settings.
+    * @return the promise of the result
+    */
+  def addUser(username: String, password: String, options: RawOptions = js.native): js.Promise[CommandResult] = js.native
 
-  def close(): Unit = js.native
+  /**
+    * Add a user to the database.
+    * @param username the username.
+    * @param password the password.
+    * @param options  the optional settings.
+    * @param callback the results callback
+    */
+  def addUser(username: String, password: String, options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
 
-  def collection(name: String): Collection = js.native
+  /**
+    * Add a user to the database.
+    * @param username the username.
+    * @param password the password.
+    * @param callback the results callback
+    */
+  def addUser(username: String, password: String, callback: MongoCallback[CommandResult]): Unit = js.native
 
-  def collection(name: String, callback: js.Function): Unit = js.native
+  /**
+    * Returns the Admin db instance
+    * @return the Admin db instance
+    */
+  def admin(): Admin = js.native
 
-  def collection(name: String, options: CollectionOptions | js.Any, callback: js.Function): Unit = js.native
+  /**
+    * Authenticate a user against the server.
+    * @param username the username.
+    * @param password the password.
+    * @param options  the optional settings.
+    * @return the promise of the result
+    */
+  def authenticate(username: String,
+                   password: String,
+                   options: RawOptions = js.native): js.Promise[CommandResult] = js.native
 
-  def collectionsInfo(): Cursor[js.Any] = js.native
+  /**
+    * Authenticate a user against the server.
+    * @param username the username.
+    * @param password the password.
+    * @param options  the optional settings.
+    * @param callback the results callback
+    */
+  def authenticate(username: String,
+                   password: String,
+                   options: RawOptions,
+                   callback: MongoCallback[CommandResult]): Unit = js.native
 
-  def collectionNames(callback: js.Function): Unit = js.native
+  /**
+    * Authenticate a user against the server.
+    * @param username the username.
+    * @param password the password.
+    * @param callback the results callback
+    */
+  def authenticate(username: String, password: String, callback: MongoCallback[CommandResult]): Unit = js.native
 
-  def createCollection(name: String, callback: js.Function): Unit = js.native
+  /**
+    * Close the db and its underlying connections
+    * @param force Force close, emitting no events
+    * @return the promise of the result
+    */
+  def close(force: Boolean = js.native): js.Promise[Null] = js.native
 
-  def createCollection(name: String, options: CollectionOptions | js.Any, callback: js.Function): Unit = js.native
+  /**
+    * Close the db and its underlying connections
+    * @param force    Force close, emitting no events
+    * @param callback the results callback
+    */
+  def close(force: Boolean, callback: MongoCallback[Null]): Unit = js.native
 
-  def createIndex(name: String, flag: Char, callback: js.Function): Unit = js.native
+  /**
+    * Close the db and its underlying connections
+    * @param callback the results callback
+    */
+  def close(callback: MongoCallback[Null]): Unit = js.native
 
-  def dropCollection(name: String, callback: js.Function): Unit = js.native
+  /**
+    * Fetch a specific collection (containing the actual collection information).
+    * If the application does not use strict mode you can can use it without a callback in the following way:
+    * {{{ var collection = db.collection('mycollection'); }}}
+    * @param name the collection name we wish to access.
+    * @return the collection
+    */
+  def collection(name: String, options: CollectionOptions | RawOptions = js.native): Collection = js.native
 
-  def dropDatabase(callback: js.Function): Unit = js.native
+  /**
+    * Fetch a specific collection (containing the actual collection information).
+    * If the application does not use strict mode you can can use it without a callback in the following way:
+    * {{{ var collection = db.collection('mycollection'); }}}
+    * @param name     the collection name we wish to access.
+    * @param callback the collection result callback
+    */
+  def collection(name: String, callback: MongoCallback[Collection]): Unit = js.native
+
+  /**
+    * Fetch a specific collection (containing the actual collection information).
+    * If the application does not use strict mode you can can use it without a callback in the following way:
+    * {{{ var collection = db.collection('mycollection'); }}}
+    * @param name     the collection name we wish to access.
+    * @param options  the optional settings.
+    * @param callback the collection result callback
+    */
+  def collection(name: String, options: CollectionOptions | RawOptions, callback: MongoCallback[Collection]): Unit = js.native
+
+  /**
+    * Fetch all collections for the current db.
+    * @return the promise of an array of collections
+    */
+  def collections(): js.Promise[js.Array[Collection]] = js.native
+
+  /**
+    * Fetch all collections for the current db.
+    * @param callback the collections result callback
+    */
+  def collections(callback: MongoCallback[js.Array[Collection]]): Unit = js.native
+
+  /**
+    * Execute a command
+    * @param command the command hash
+    * @param options the optional settings.
+    * @return the promise of the result
+    */
+  def command(command: js.Any, options: RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Execute a command
+    * @param command  the command hash
+    * @param options  the optional settings.
+    * @param callback the results callback
+    */
+  def command(command: js.Any, options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Execute a command
+    * @param command  the command hash
+    * @param callback the results callback
+    */
+  def command(command: js.Any, callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Create a new collection on a server with the specified options. Use this to create capped collections.
+    * More information about command options available at https://docs.mongodb.com/manual/reference/command/create/
+    * @param name    the collection name we wish to access.
+    * @param options the optional settings
+    * @return a promise of the result
+    */
+  def createCollection(name: String,
+                       options: CollectionOptions | RawOptions = js.native): js.Promise[Collection] = js.native
+
+  /**
+    * Create a new collection on a server with the specified options. Use this to create capped collections.
+    * More information about command options available at https://docs.mongodb.com/manual/reference/command/create/
+    * @param name     the collection name we wish to access.
+    * @param options  the optional settings
+    * @param callback the results callback
+    */
+  def createCollection(name: String,
+                       options: CollectionOptions | RawOptions,
+                       callback: MongoCallback[Collection]): Unit = js.native
+
+  /**
+    * Create a new collection on a server with the specified options. Use this to create capped collections.
+    * More information about command options available at https://docs.mongodb.com/manual/reference/command/create/
+    * @param name     the collection name we wish to access.
+    * @param callback the results callback
+    */
+  def createCollection(name: String, callback: MongoCallback[Collection]): Unit = js.native
+
+  /**
+    * Creates an index on the db and collection collection.
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param options     the optional settings.
+    * @return the promise of the result
+    */
+  def createIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  options: IndexOptions | RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Creates an index on the db and collection collection.
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param options     the optional settings.
+    * @param callback    the results callback
+    */
+  def createIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  options: IndexOptions | RawOptions,
+                  callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Creates an index on the db and collection collection.
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param callback    the results callback
+    */
+  def createIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Create a new Db instance sharing the current socket connections. Be aware that the new db instances are
+    * related in a parent-child relationship to the original instance so that events are correctly emitted on child
+    * db instances. Child db instances are cached so performing db('db1') twice will return the same instance.
+    * You can control these behaviors with the options noListener and returnNonCachedInstance.
+    * @param databaseName the name of the database we want to use.
+    * @param options      the optional settings.
+    */
+  def db(databaseName: String, options: DbSharingOptions = js.native): Db = js.native
+
+  /**
+    * Drop a collection from the database, removing it permanently. New accesses will create a new collection.
+    * @param name the name of collection to drop
+    * @return the promise of the result
+    */
+  def dropCollection(name: String): js.Promise[CommandResult] = js.native
+
+  /**
+    * Drop a collection from the database, removing it permanently. New accesses will create a new collection.
+    * @param name     the name of collection to drop
+    * @param callback the results callback
+    */
+  def dropCollection(name: String, callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Drop a database, removing it permanently from the server.
+    * @return the promise of the result
+    */
+  def dropDatabase(): js.Promise[CommandResult] = js.native
+
+  /**
+    * Drop a database, removing it permanently from the server.
+    * @param callback the callback containing a reference to this instance
+    */
+  def dropDatabase(callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Ensures that an index exists, if it does not it creates it
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param options     the optional settings.
+    * @return the promise of the result
+    */
+  def ensureIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  options: IndexOptions | RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Ensures that an index exists, if it does not it creates it
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param options     the optional settings.
+    * @param callback    the results callback
+    */
+  def ensureIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  options: IndexOptions | RawOptions,
+                  callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Ensures that an index exists, if it does not it creates it
+    * @param name        the name of the collection to create the index on.
+    * @param fieldOrSpec defines the index.
+    * @param callback    the results callback
+    */
+  def ensureIndex(name: String,
+                  fieldOrSpec: String | js.Any,
+                  callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Evaluate JavaScript on the server
+    * @param code       JavaScript to execute on server.
+    * @param parameters The parameters for the call.
+    * @param options    the optional settings.
+    * @return the promise of the result
+    */
+  def eval(code: Code,
+           parameters: js.Array[String] | js.Any,
+           options: RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Evaluate JavaScript on the server
+    * @param code       JavaScript to execute on server.
+    * @param parameters The parameters for the call.
+    * @param options    the optional settings.
+    * @param callback   the results callback
+    */
+  def eval(code: Code,
+           parameters: js.Array[String] | js.Any,
+           options: RawOptions,
+           callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Evaluate JavaScript on the server
+    * @param code       JavaScript to execute on server.
+    * @param parameters The parameters for the call.
+    * @param callback   the results callback
+    */
+  def eval(code: Code,
+           parameters: js.Array[String] | js.Any,
+           callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Runs a command on the database as admin.
+    * @param command the command hash
+    * @param options the optional settings.
+    * @return the promise of the result
+    */
+  def executeDbAdminCommand(command: js.Any,
+                            options: ReadPreferenceOptions | RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Runs a command on the database as admin.
+    * @param command  the command hash
+    * @param options  the optional settings.
+    * @param callback the results callback
+    */
+  def executeDbAdminCommand(command: js.Any,
+                            options: ReadPreferenceOptions | RawOptions,
+                            callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Runs a command on the database as admin.
+    * @param command  the command hash
+    * @param callback the results callback
+    */
+  def executeDbAdminCommand(command: js.Any,
+                            callback: MongoCallback[CommandResult]): Unit = js.native
 
   /**
     * Retrieves this collections index info.
@@ -111,50 +423,120 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def listCollections(filter: js.Any = js.native,
                       options: ListCollectionsOptions | RawOptions = js.native): CommandCursor[CollectionInfo] = js.native
 
-  /**
-    *
-    * @param callback
-    */
-  def open(callback: js.Function): Unit = js.native
-
-}
-
-/**
-  * Mongo Database Companion
-  * @author lawrence.daniels@gmail.com
-  */
-object Db {
 
   /**
-    * Mongo Database Extensions
-    * @author lawrence.daniels@gmail.com
+    * Logout user from server, fire off on all connections and remove all auth info
+    * @param options the optional settings.
+    * @return the promise of the result
     */
-  implicit class MongoDatabaseExtensions(val db: Db) extends AnyVal {
+  def logout(options: RawOptions): js.Promise[CommandResult] = js.native
 
-    @inline
-    def collectionFuture(name: String, options: CollectionOptions | js.Any = null): Future[Collection] = {
-      callbackMongoFuture[Collection](db.collection(name, options, _))
-    }
+  /**
+    * Logout user from server, fire off on all connections and remove all auth info
+    * @param options  the optional settings.
+    * @param callback the command result callback
+    */
+  def logout(options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
 
-    @inline
-    def collectionNamesFuture: Future[Array[String]] = callbackMongoFuture[js.Array[String]](db.collectionNames)
+  /**
+    * Logout user from server, fire off on all connections and remove all auth info
+    * @param callback the command result callback
+    */
+  def logout(callback: MongoCallback[CommandResult]): Unit = js.native
 
-    @inline
-    def createCollectionFuture(name: String, options: CollectionOptions = null): Future[Collection] = {
-      callbackMongoFuture[Collection](db.createCollection(name, options, _))
-    }
+  /**
+    * Open the database
+    */
+  def open(): js.Promise[Db] = js.native
 
-    @inline
-    def dropCollectionFuture(name: String): Future[OperationResult] =
-      callbackMongoFuture[OperationResult](db.dropCollection(name, _))
+  /**
+    * Open the database
+    * @param callback the callback
+    */
+  def open(callback: MongoCallback[Db]): Unit = js.native
 
-    @inline
-    def dropDatabaseFuture(): Future[OperationResult] = callbackMongoFuture[OperationResult](db.dropDatabase)
+  /**
+    * Remove a user from a database
+    * @param username the username.
+    * @param options  the optional settings.
+    * @return the promise of the result
+    */
+  def removeUser(username: String,
+                 options: RemoveUserOptions | RawOptions = js.native): js.Promise[CommandResult] = js.native
 
-    @inline
-    def openFuture(): Future[Db] = callbackMongoFuture[Db](db.open)
+  /**
+    * Remove a user from a database
+    * @param username the username.
+    * @param options  the optional settings.
+    * @param callback the command result callback
+    */
+  def removeUser(username: String,
+                 options: RemoveUserOptions | RawOptions,
+                 callback: MongoCallback[CommandResult]): Unit = js.native
 
-  }
+  /**
+    * Remove a user from a database
+    * @param username the username.
+    * @param callback the command result callback
+    */
+  def removeUser(username: String, callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Rename a collection.
+    * @param fromCollection the name of current collection to rename.
+    * @param toCollection   the new name of of the collection.
+    * @param options        the optional settings.
+    * @return the promise of the result
+    */
+  def renameCollection(fromCollection: String,
+                       toCollection: String,
+                       options: RenameOptions | RawOptions = js.native): js.Promise[CommandResult] = js.native
+
+  /**
+    * Rename a collection.
+    * @param fromCollection the name of current collection to rename.
+    * @param toCollection   the new name of of the collection.
+    * @param options        the optional settings.
+    * @param callback       the results callback
+    */
+  def renameCollection(fromCollection: String,
+                       toCollection: String,
+                       options: RenameOptions | RawOptions,
+                       callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Rename a collection.
+    * @param fromCollection the name of current collection to rename.
+    * @param toCollection   the new name of of the collection.
+    * @param callback       the results callback
+    */
+  def renameCollection(fromCollection: String,
+                       toCollection: String,
+                       callback: MongoCallback[CommandResult]): Unit = js.native
+
+  /**
+    * Get all the db statistics.
+    * @param options the optional settings.
+    */
+  def stats(options: DbStatsOptions | RawOptions = js.native): MongoCallback[DbStats] = js.native
+
+  /**
+    * Get all the db statistics.
+    * @param options  the optional settings.
+    * @param callback the collection result callback
+    */
+  def stats(options: DbStatsOptions | RawOptions, callback: MongoCallback[DbStats]): Unit = js.native
+
+  /**
+    * Get all the db statistics.
+    * @param callback the collection result callback
+    */
+  def stats(callback: MongoCallback[DbStats]): Unit = js.native
+
+  /**
+    * Unref all sockets
+    */
+  def unref(): Unit = js.native
 
 }
 
@@ -208,3 +590,63 @@ trait CollectionInfo_IdIndex extends js.Object {
   val name: String = js.native
   val ns: String = js.native
 }
+
+/**
+  * Database Options
+  * @param authSource          string	null	optional If the database authentication is dependent on another databaseName.
+  * @param w                   number | string	null	optional The write concern.
+  * @param wtimeout            number	null	optional The write concern timeout.
+  * @param j                   boolean	false	optional Specify a journal write concern.
+  * @param forceServerObjectId boolean	false	optional Force server to assign _id values instead of driver.
+  * @param serializeFunctions  boolean	false	optional Serialize functions on any object.
+  * @param ignoreUndefined     Boolean	false	optional Specify if the BSON serializer should ignore undefined fields.
+  * @param raw                 boolean	false	optional Return document results as raw BSON buffers.
+  * @param promoteLongs        boolean	true	optional Promotes Long values to number if they fit inside the 53 bits resolution.
+  * @param promoteBuffers      boolean	false	optional Promotes Binary BSON values to native Node Buffers.
+  * @param promoteValues       boolean	true	optional Promotes BSON values to native types where possible, set to false to only receive wrapper types.
+  * @param bufferMaxEntries    number	-1	optional Sets a cap on how many operations the driver will buffer up before giving up on getting a working connection, default is -1 which is unlimited.
+  * @param readPreference      ReadPreference | string	null	optional The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED, ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
+  * @param  pkFactory          object	null	optional A primary key factory object for generation of custom _id keys.
+  * @param  promiseLibrary     object	null	optional A Promise library class the application wishes to use such as Bluebird, must be ES6 compatible
+  * @param  readConcern        object	null	optional Specify a read concern for the collection. (only MongoDB 3.2 or higher supported)
+  *                            Name	Type	Default	Description
+  * @param  level              object	'local'	optional
+  *                            Specify a read concern level for the collection operations, one of [local|majority]. (only MongoDB 3.2 or higher supported)
+  */
+@ScalaJSDefined
+class DbOptions(val authSource: js.UndefOr[String] = js.undefined,
+                val w: js.UndefOr[Int | String] = js.undefined,
+                val wtimeout: js.UndefOr[Int] = js.undefined,
+                val j: js.UndefOr[Boolean] = js.undefined,
+                val forceServerObjectId: js.UndefOr[Boolean] = js.undefined,
+                val serializeFunctions: js.UndefOr[Boolean] = js.undefined,
+                val ignoreUndefined: js.UndefOr[Boolean] = js.undefined,
+                val raw: js.UndefOr[Boolean] = js.undefined,
+                val promoteLongs: js.UndefOr[Boolean] = js.undefined,
+                val promoteBuffers: js.UndefOr[Boolean] = js.undefined,
+                val promoteValues: js.UndefOr[Boolean] = js.undefined,
+                val bufferMaxEntries: js.UndefOr[Int] = js.undefined,
+                val readPreference: js.UndefOr[ReadPreference] = js.undefined,
+                val pkFactory: js.UndefOr[js.Any] = js.undefined,
+                val promiseLibrary: js.UndefOr[js.Any] = js.undefined,
+                val readConcern: js.UndefOr[js.Any] = js.undefined,
+                val level: js.UndefOr[js.Any] = js.undefined)
+  extends js.Object
+
+/**
+  * Database Clone Options
+  * @param noListener              Do not make the db an event listener to the original connection.
+  * @param returnNonCachedInstance Control if you want to return a cached instance or have a new one created
+  */
+@ScalaJSDefined
+class DbSharingOptions(val noListener: js.UndefOr[Boolean] = js.undefined,
+                       val returnNonCachedInstance: js.UndefOr[Boolean] = js.undefined)
+  extends js.Object
+
+/**
+  * Database Statistics Options
+  * @param scale Divide the returned sizes by scale value.
+  */
+@ScalaJSDefined
+class DbStatsOptions(val scale: js.UndefOr[Double] = js.undefined)
+  extends js.Object

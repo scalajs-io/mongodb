@@ -5,13 +5,12 @@ import io.scalajs.util.PromiseHelper._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
 import scala.scalajs.js.|
 
 /**
   * Mongo Collection
-  * @author lawrence.daniels@gmail.com
   * @see [[http://mongodb.github.io/node-mongodb-native/2.1/api/index.html]]
+  * @author lawrence.daniels@gmail.com
   */
 @js.native
 trait Collection extends js.Object {
@@ -23,9 +22,9 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example aggregate(pipeline, options, callback)
     */
-  def aggregate[B <: js.Any](pipeline: js.Array[_ <: js.Any],
+  def aggregate[A <: js.Any](pipeline: js.Array[_ <: js.Any],
                              options: AggregationOptions,
-                             callback: MongoResultCallback[js.Array[B]]): Unit = js.native
+                             callback: MongoCallback[js.Array[A]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
@@ -33,8 +32,8 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example aggregate(pipeline, options, callback)
     */
-  def aggregate[B <: js.Any](pipeline: js.Array[_ <: js.Any],
-                             callback: MongoResultCallback[js.Array[B]]): Unit = js.native
+  def aggregate[A <: js.Any](pipeline: js.Array[_ <: js.Any],
+                             callback: MongoCallback[js.Array[A]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
@@ -53,7 +52,7 @@ trait Collection extends js.Object {
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
                              options: RawOptions,
-                             callback: MongoResultCallback[BulkWriteOpResultObject]): Unit = js.native
+                             callback: MongoCallback[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -62,7 +61,7 @@ trait Collection extends js.Object {
     * @example bulkWrite(operations, options, callback)
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
-                             callback: MongoResultCallback[BulkWriteOpResultObject]): Unit = js.native
+                             callback: MongoCallback[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -137,7 +136,7 @@ trait Collection extends js.Object {
     */
   def deleteMany(filter: js.Any,
                  options: DeleteOptions,
-                 callback: MongoResultCallback[DeleteWriteOpResult]): Unit = js.native
+                 callback: MongoCallback[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -145,7 +144,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example deleteMany(filter, options, callback)
     */
-  def deleteMany(filter: js.Any, callback: MongoResultCallback[DeleteWriteOpResult]): Unit = js.native
+  def deleteMany(filter: js.Any, callback: MongoCallback[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -456,7 +455,7 @@ trait Collection extends js.Object {
     * @example indexExists(indexes, callback)
     * @return Promise if no callback passed
     */
-  def indexExists(indexes: js.Array[String], callback: MongoResultCallback[Boolean]): Unit = js.native
+  def indexExists(indexes: js.Array[String], callback: MongoCallback[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
@@ -473,7 +472,7 @@ trait Collection extends js.Object {
     * @example indexExists(indexes, callback)
     * @return Promise if no callback passed
     */
-  def indexExists(indexes: String, callback: MongoResultCallback[Boolean]): Unit = js.native
+  def indexExists(indexes: String, callback: MongoCallback[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
@@ -522,7 +521,7 @@ trait Collection extends js.Object {
     * This behavior can be overridden by setting the forceServerObjectId flag.
     * @param doc Document to insert.
     */
-  def insert(doc: js.Any, callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+  def insert(doc: js.Any, callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain
@@ -532,7 +531,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     */
   def insert(doc: js.Any, options: WriteOptions | RawOptions,
-             callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+             callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -545,7 +544,7 @@ trait Collection extends js.Object {
   @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
   def insert[T <: js.Any](docs: js.Array[T],
                           options: WriteOptions | RawOptions,
-                          callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+                          callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -558,7 +557,7 @@ trait Collection extends js.Object {
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
                               options: WriteOptions | RawOptions,
-                              callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+                              callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -569,7 +568,7 @@ trait Collection extends js.Object {
     * @example insertMany(docs, options, callback): Promise
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
-                              callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+                              callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -592,7 +591,7 @@ trait Collection extends js.Object {
     */
   def insertOne(doc: js.Any,
                 options: WriteOptions | RawOptions,
-                callback: MongoResultCallback[InsertWriteOpResult]): Unit = js.native
+                callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Returns if the collection is a capped collection
@@ -605,7 +604,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example isCapped(callback): Promise
     */
-  def isCapped(callback: MongoResultCallback[Boolean]): Unit = js.native
+  def isCapped(callback: MongoCallback[Boolean]): Unit = js.native
 
   /**
     * Get the list of all indexes information for the collection.
@@ -943,9 +942,3 @@ object Collection {
 
 }
 
-/**
-  * Rename Options
-  * @param dropTarget drop the target name collection if it previously exists.
-  */
-@ScalaJSDefined
-class RenameOptions(val dropTarget: js.UndefOr[Boolean] = js.undefined) extends js.Object

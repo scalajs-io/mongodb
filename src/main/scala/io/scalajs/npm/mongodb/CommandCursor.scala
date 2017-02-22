@@ -35,7 +35,7 @@ trait CommandCursor[T] extends nodejs.stream.Readable {
     * Close the cursor, sending a KillCursor command and emitting close.
     * @param callback The result callback.
     */
-  def close(callback: MongoResultCallback[this.type]): Unit = js.native
+  def close(callback: MongoCallback[this.type]): Unit = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray},
@@ -46,7 +46,7 @@ trait CommandCursor[T] extends nodejs.stream.Readable {
     * for making sure that the entire result can fit the memory.
     * @param callback The result callback.
     */
-  def each(callback: MongoResultCallback[T]): Unit = js.native
+  def each(callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Is the cursor closed
@@ -65,7 +65,7 @@ trait CommandCursor[T] extends nodejs.stream.Readable {
     * Get the next available document from the cursor, returns null if no more documents are available.
     * @param callback The result callback.
     */
-  def next(callback: MongoResultCallback[T]): Unit = js.native
+  def next(callback: MongoCallback[T]): Unit = js.native
 
   /**
     * Returns an array of documents. The caller is responsible for making sure that there
@@ -81,7 +81,7 @@ trait CommandCursor[T] extends nodejs.stream.Readable {
     * results when this cursor had been previouly accessed.
     * @param callback The result callback.
     */
-  def toArray(callback: MongoResultCallback[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback[js.Array[T]]): Unit = js.native
 
 }
 

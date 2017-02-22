@@ -2,6 +2,7 @@ package io.scalajs.npm.mongodb
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
+import scala.scalajs.js.|
 
 /**
   * Document Update Options
@@ -11,8 +12,8 @@ import scala.scalajs.js.annotation.ScalaJSDefined
   * @param upsert   Update operation is an upsert.
   */
 @ScalaJSDefined
-class UpdateOptions(var w: js.UndefOr[Int] = js.undefined,
+class UpdateOptions(var w: js.UndefOr[Int | String] = js.undefined,
                     var wtimeout: js.UndefOr[Int] = js.undefined,
                     var j: js.UndefOr[Boolean] = js.undefined,
                     var upsert: js.UndefOr[Boolean] = js.undefined)
-    extends js.Object
+  extends js.Object
