@@ -1,7 +1,6 @@
 package io.scalajs.npm.mongodb.gridfs
 
 import io.scalajs.npm.mongodb.Chunk
-import io.scalajs.npm.mongodb.Chunk
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
