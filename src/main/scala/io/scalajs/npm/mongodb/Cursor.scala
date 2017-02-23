@@ -354,7 +354,14 @@ trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
-    * the results. Note that the array only contain partial results when this cursor had been previouly accessed.
+    * the results. Note that the array only contain partial results when this cursor had been previously accessed.
+    * In that case, cursor.rewind() can be used to reset the cursor.
+    */
+  def toArray(): js.Promise[js.Array[T]] = js.native
+
+  /**
+    * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
+    * the results. Note that the array only contain partial results when this cursor had been previously accessed.
     * In that case, cursor.rewind() can be used to reset the cursor.
     * @param callback This will be called after executing this method successfully. The first parameter will contain
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an

@@ -513,7 +513,8 @@ trait Collection extends js.Object {
     * This behavior can be overridden by setting the forceServerObjectId flag.
     * @param doc the given document
     */
-  def insert(doc: js.Any): js.Promise[InsertWriteOpResult] = js.native
+  @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
+  def insert(doc: js.Any, options: WriteOptions | RawOptions = js.native): js.Promise[InsertWriteOpResult] = js.native
 
   /**
     * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain
@@ -521,6 +522,7 @@ trait Collection extends js.Object {
     * This behavior can be overridden by setting the forceServerObjectId flag.
     * @param doc Document to insert.
     */
+  @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
   def insert(doc: js.Any, callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
@@ -530,21 +532,10 @@ trait Collection extends js.Object {
     * @param doc      Document to insert.
     * @param callback The command result callback
     */
-  def insert(doc: js.Any, options: WriteOptions | RawOptions,
-             callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
-
-  /**
-    * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
-    * added to each of the documents missing it by the driver, mutating the document. This behavior can be overridden
-    * by setting the forceServerObjectId flag.
-    * @param docs     Documents to insert.
-    * @param options  Optional settings.
-    * @param callback The command result callback
-    */
   @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
-  def insert[T <: js.Any](docs: js.Array[T],
-                          options: WriteOptions | RawOptions,
-                          callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
+  def insert(doc: js.Any,
+             options: WriteOptions | RawOptions,
+             callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
