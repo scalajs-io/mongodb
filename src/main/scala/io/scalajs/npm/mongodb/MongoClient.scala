@@ -16,17 +16,24 @@ class MongoClient() extends js.Object {
 
   /**
     * Close the current db connection, including all the child db instances.
+    * @return a completion promise
+    */
+  def close(): js.Promise[Unit] = js.native
+
+  /**
+    * Close the current db connection, including all the child db instances.
     * Emits close event and calls optional callback.
     * @param callback the callback function
     */
-  def close(callback: js.Function): Unit = js.native
+  def close(callback: js.Function1[MongoError, Any]): Unit = js.native
 
   /**
     * Connect to MongoDB using a url
     * @param url      the given connection URL
-    * @param callback the callback function
+    * @param options  the given [[ConnectionOptions options]]
+    * @return the promise of a [[Db connection]]
     */
-  def connect(url: String, callback: js.Function2[MongoError, Db, Any]): Unit = js.native
+  def connect(url: String, options: ConnectionOptions): js.Promise[Db] = js.native
 
   /**
     * Connect to MongoDB using a url
@@ -34,7 +41,14 @@ class MongoClient() extends js.Object {
     * @param options  the given [[ConnectionOptions options]]
     * @param callback the callback function
     */
-  def connect(url: String, options: ConnectionOptions, callback: js.Function2[MongoError, Db, Any]): Unit = js.native
+  def connect(url: String, options: ConnectionOptions, callback: MongoCallback[Db]): Unit = js.native
+
+  /**
+    * Connect to MongoDB using a url
+    * @param url      the given connection URL
+    * @param callback the callback function
+    */
+  def connect(url: String, callback: MongoCallback[Db]): Unit = js.native
 
   /**
     * Create a new Db instance sharing the current socket connections.
@@ -47,7 +61,7 @@ class MongoClient() extends js.Object {
     * Initializes the database connection
     * @param callback the callback function
     */
-  def open(callback: js.Function): Unit = js.native
+  def open(callback: MongoCallback[Db]): Unit = js.native
 
 }
 

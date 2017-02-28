@@ -446,6 +446,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
 
   /**
     * Open the database
+    * @return the promise of a [[Db]]
     */
   def open(): js.Promise[Db] = js.native
 
