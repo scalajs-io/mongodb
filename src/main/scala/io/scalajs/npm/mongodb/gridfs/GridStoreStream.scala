@@ -1,6 +1,6 @@
 package io.scalajs.npm.mongodb.gridfs
 
-import io.scalajs.nodejs.stream.Duplex
+import io.scalajs.nodejs.stream.IDuplex
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
@@ -12,4 +12,4 @@ import scala.scalajs.js.annotation.JSImport
 @deprecated("Use GridFSBucket API instead", since = "2.2")
 @js.native
 @JSImport("mongodb", "GridStoreStream")
-class GridStoreStream() extends Duplex
+class GridStoreStream() extends IDuplex
