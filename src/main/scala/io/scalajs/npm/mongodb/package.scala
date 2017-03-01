@@ -471,27 +471,6 @@ package object mongodb {
   }
 
   /**
-    * Mongo Client Extensions
-    * @author lawrence.daniels@gmail.com
-    */
-  implicit class MongoClientExtensions(val client: MongoClient) extends AnyVal {
-
-    @inline
-    def closeFuture(): Future[Db] = callbackMongoFuture[Db](client.close)
-
-    @inline
-    def connectFuture(url: String): Future[Db] = callbackMongoFuture[Db](client.connect(url, _))
-
-    @inline
-    def connectFuture(url: String, options: ConnectionOptions): Future[Db] =
-      callbackMongoFuture[Db](client.connect(url, options, _))
-
-    @inline
-    def openFuture(): Future[Db] = callbackMongoFuture[Db](client.open)
-
-  }
-
-  /**
     * Mongo Projection Enrichment
     * @param fields the given array of fields
     */

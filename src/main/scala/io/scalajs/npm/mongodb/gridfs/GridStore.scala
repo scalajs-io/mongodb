@@ -267,5 +267,5 @@ class GridStore(val db: Db,
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-@JSName("GridStore")
+@JSImport("mongodb", "GridStore")
 object GridStore extends GridStoreClass
