@@ -1,6 +1,6 @@
 {
   "name": "mongodb-sjs",
-  "version": "2.2.22-1",
+  "version": "2.2.22-3",
   "private": true,
   "dependencies": {
     "mongodb": "^2.2.22",

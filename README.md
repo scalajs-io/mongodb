@@ -9,7 +9,6 @@ The official MongoDB driver for Node.js. Provides a high-level API on top of mon
 <a name="build_requirements"></a>
 ### Build Requirements
 
-* [ScalaJs.io v0.3.x](https://github.com/scalajs-io/scalajs.io)
 * [SBT v0.13.13](http://www.scala-sbt.org/download.html)
 
 <a name="building_sdk"></a>
@@ -66,7 +65,7 @@ class Sample(var _id: js.UndefOr[ObjectID] = js.undefined,
 To add the `MongoDB` binding to your project, add the following to your build.sbt:  
 
 ```sbt
-libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "2.2.22-1"
+libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "2.2.22-3"
 ```
 
 Optionally, you may add the Sonatype Repository resolver:
