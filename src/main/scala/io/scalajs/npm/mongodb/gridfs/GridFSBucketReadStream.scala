@@ -1,10 +1,10 @@
-package io.scalajs.npm.mongodb.gridfs
+package io.scalajs.npm.mongodb
+package gridfs
 
 import io.scalajs.{RawOptions, nodejs}
-import io.scalajs.npm.mongodb.Collection
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSImport
+import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
 import scala.scalajs.js.|
 
 /**
@@ -44,3 +44,18 @@ class GridFSBucketReadStream(chunks: Collection,
   def start(offset: Int): GridFSBucketReadStream = js.native
 
 }
+
+/**
+  * GridFS Bucket Read Stream Options
+  * @param sort  Optional sort for the file find query.
+  * @param skip  Optional skip for the file find query.
+  * @param start Optional 0-based offset in bytes to start streaming from.
+  * @param end   Optional 0-based offset in bytes to stop streaming before.
+  * @author lawrence.daniels@gmail.com
+  */
+@ScalaJSDefined
+class ReadStreamOptions(var sort: js.UndefOr[Integer] = js.undefined,
+                        var skip: js.UndefOr[Integer] = js.undefined,
+                        var start: js.UndefOr[Integer] = js.undefined,
+                        var end: js.UndefOr[Integer] = js.undefined)
+  extends js.Object

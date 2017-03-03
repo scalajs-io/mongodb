@@ -30,3 +30,18 @@ trait UpdateWriteOpResultObject extends js.Object {
   var upsertedId: String = js.native
 
 }
+
+/**
+  * Update Write Result
+  * @author lawrence.daniels@gmail.com
+  */
+@js.native
+trait UpdateWriteResult extends js.Object with Okayable {
+
+  // The total count of documents scanned.
+  def n: Int = js.native
+
+  // The total count of documents modified.
+  def nModified: Int = js.native
+
+}

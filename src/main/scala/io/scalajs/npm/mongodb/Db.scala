@@ -67,7 +67,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param options  the optional settings.
     * @param callback the results callback
     */
-  def addUser(username: String, password: String, options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
+  def addUser(username: String, password: String, options: RawOptions, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Add a user to the database.
@@ -75,7 +75,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param password the password.
     * @param callback the results callback
     */
-  def addUser(username: String, password: String, callback: MongoCallback[CommandResult]): Unit = js.native
+  def addUser(username: String, password: String, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Returns the Admin db instance
@@ -104,7 +104,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def authenticate(username: String,
                    password: String,
                    options: RawOptions,
-                   callback: MongoCallback[CommandResult]): Unit = js.native
+                   callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Authenticate a user against the server.
@@ -112,7 +112,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param password the password.
     * @param callback the results callback
     */
-  def authenticate(username: String, password: String, callback: MongoCallback[CommandResult]): Unit = js.native
+  def authenticate(username: String, password: String, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Close the db and its underlying connections
@@ -126,13 +126,13 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param force    Force close, emitting no events
     * @param callback the results callback
     */
-  def close(force: Boolean, callback: MongoCallback[Null]): Unit = js.native
+  def close(force: Boolean, callback: MongoCallback1[Null]): Unit = js.native
 
   /**
     * Close the db and its underlying connections
     * @param callback the results callback
     */
-  def close(callback: MongoCallback[Null]): Unit = js.native
+  def close(callback: MongoCallback1[Null]): Unit = js.native
 
   /**
     * Fetch a specific collection (containing the actual collection information).
@@ -150,7 +150,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param name     the collection name we wish to access.
     * @param callback the collection result callback
     */
-  def collection(name: String, callback: MongoCallback[Collection]): Unit = js.native
+  def collection(name: String, callback: MongoCallback1[Collection]): Unit = js.native
 
   /**
     * Fetch a specific collection (containing the actual collection information).
@@ -160,7 +160,9 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param options  the optional settings.
     * @param callback the collection result callback
     */
-  def collection(name: String, options: CollectionOptions | RawOptions, callback: MongoCallback[Collection]): Unit = js.native
+  def collection(name: String,
+                 options: CollectionOptions | RawOptions,
+                 callback: MongoCallback1[Collection]): Unit = js.native
 
   /**
     * Fetch all collections for the current db.
@@ -172,7 +174,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * Fetch all collections for the current db.
     * @param callback the collections result callback
     */
-  def collections(callback: MongoCallback[js.Array[Collection]]): Unit = js.native
+  def collections(callback: MongoCallback1[js.Array[Collection]]): Unit = js.native
 
   /**
     * Execute a command
@@ -188,14 +190,14 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param options  the optional settings.
     * @param callback the results callback
     */
-  def command(command: js.Any, options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
+  def command(command: js.Any, options: RawOptions, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Execute a command
     * @param command  the command hash
     * @param callback the results callback
     */
-  def command(command: js.Any, callback: MongoCallback[CommandResult]): Unit = js.native
+  def command(command: js.Any, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Create a new collection on a server with the specified options. Use this to create capped collections.
@@ -216,7 +218,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def createCollection(name: String,
                        options: CollectionOptions | RawOptions,
-                       callback: MongoCallback[Collection]): Unit = js.native
+                       callback: MongoCallback1[Collection]): Unit = js.native
 
   /**
     * Create a new collection on a server with the specified options. Use this to create capped collections.
@@ -224,7 +226,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param name     the collection name we wish to access.
     * @param callback the results callback
     */
-  def createCollection(name: String, callback: MongoCallback[Collection]): Unit = js.native
+  def createCollection(name: String, callback: MongoCallback1[Collection]): Unit = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -247,7 +249,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def createIndex(name: String,
                   fieldOrSpec: String | js.Any,
                   options: IndexOptions | RawOptions,
-                  callback: MongoCallback[CommandResult]): Unit = js.native
+                  callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -257,7 +259,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def createIndex(name: String,
                   fieldOrSpec: String | js.Any,
-                  callback: MongoCallback[CommandResult]): Unit = js.native
+                  callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Create a new Db instance sharing the current socket connections. Be aware that the new db instances are
@@ -281,7 +283,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param name     the name of collection to drop
     * @param callback the results callback
     */
-  def dropCollection(name: String, callback: MongoCallback[CommandResult]): Unit = js.native
+  def dropCollection(name: String, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Drop a database, removing it permanently from the server.
@@ -293,7 +295,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * Drop a database, removing it permanently from the server.
     * @param callback the callback containing a reference to this instance
     */
-  def dropDatabase(callback: MongoCallback[CommandResult]): Unit = js.native
+  def dropDatabase(callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Ensures that an index exists, if it does not it creates it
@@ -316,7 +318,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def ensureIndex(name: String,
                   fieldOrSpec: String | js.Any,
                   options: IndexOptions | RawOptions,
-                  callback: MongoCallback[CommandResult]): Unit = js.native
+                  callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Ensures that an index exists, if it does not it creates it
@@ -326,7 +328,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def ensureIndex(name: String,
                   fieldOrSpec: String | js.Any,
-                  callback: MongoCallback[CommandResult]): Unit = js.native
+                  callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Evaluate JavaScript on the server
@@ -349,7 +351,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def eval(code: Code,
            parameters: js.Array[String] | js.Any,
            options: RawOptions,
-           callback: MongoCallback[CommandResult]): Unit = js.native
+           callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Evaluate JavaScript on the server
@@ -359,7 +361,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def eval(code: Code,
            parameters: js.Array[String] | js.Any,
-           callback: MongoCallback[CommandResult]): Unit = js.native
+           callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Runs a command on the database as admin.
@@ -378,7 +380,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def executeDbAdminCommand(command: js.Any,
                             options: ReadPreferenceOptions | RawOptions,
-                            callback: MongoCallback[CommandResult]): Unit = js.native
+                            callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Runs a command on the database as admin.
@@ -386,7 +388,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param callback the results callback
     */
   def executeDbAdminCommand(command: js.Any,
-                            callback: MongoCallback[CommandResult]): Unit = js.native
+                            callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Retrieves this collections index info.
@@ -436,13 +438,13 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * @param options  the optional settings.
     * @param callback the command result callback
     */
-  def logout(options: RawOptions, callback: MongoCallback[CommandResult]): Unit = js.native
+  def logout(options: RawOptions, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Logout user from server, fire off on all connections and remove all auth info
     * @param callback the command result callback
     */
-  def logout(callback: MongoCallback[CommandResult]): Unit = js.native
+  def logout(callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Open the database
@@ -454,7 +456,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     * Open the database
     * @param callback the callback
     */
-  def open(callback: MongoCallback[Db]): Unit = js.native
+  def open(callback: MongoCallback1[Db]): Unit = js.native
 
   /**
     * Remove a user from a database
@@ -473,14 +475,14 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def removeUser(username: String,
                  options: RemoveUserOptions | RawOptions,
-                 callback: MongoCallback[CommandResult]): Unit = js.native
+                 callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Remove a user from a database
     * @param username the username.
     * @param callback the command result callback
     */
-  def removeUser(username: String, callback: MongoCallback[CommandResult]): Unit = js.native
+  def removeUser(username: String, callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Rename a collection.
@@ -503,7 +505,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   def renameCollection(fromCollection: String,
                        toCollection: String,
                        options: RenameOptions | RawOptions,
-                       callback: MongoCallback[CommandResult]): Unit = js.native
+                       callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Rename a collection.
@@ -513,26 +515,26 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
     */
   def renameCollection(fromCollection: String,
                        toCollection: String,
-                       callback: MongoCallback[CommandResult]): Unit = js.native
+                       callback: MongoCallback1[CommandResult]): Unit = js.native
 
   /**
     * Get all the db statistics.
     * @param options the optional settings.
     */
-  def stats(options: DbStatsOptions | RawOptions = js.native): MongoCallback[DbStats] = js.native
+  def stats(options: DbStatsOptions | RawOptions = js.native): MongoCallback1[DbStats] = js.native
 
   /**
     * Get all the db statistics.
     * @param options  the optional settings.
     * @param callback the collection result callback
     */
-  def stats(options: DbStatsOptions | RawOptions, callback: MongoCallback[DbStats]): Unit = js.native
+  def stats(options: DbStatsOptions | RawOptions, callback: MongoCallback1[DbStats]): Unit = js.native
 
   /**
     * Get all the db statistics.
     * @param callback the collection result callback
     */
-  def stats(callback: MongoCallback[DbStats]): Unit = js.native
+  def stats(callback: MongoCallback1[DbStats]): Unit = js.native
 
   /**
     * Unref all sockets
@@ -542,6 +544,37 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
 }
 
 /**
+  * {"name":"listing_activity",
+  * "type":"collection",
+  * "options":{},
+  * "info":{"readOnly":false},
+  * "idIndex":{"v":2,"key":{"_id":1},"name":"_id_","ns":"mi.listing_activity"}}
+  */
+@ScalaJSDefined
+class CollectionInfo(val name: String,
+                     val `type`: String,
+                     val options: RawOptions,
+                     val info: CollectionInfo_Info,
+                     val idIndex: CollectionInfo_IdIndex) extends js.Object
+
+/**
+  * CollectionInfo IdIndex
+  * @author lawrence.daniels@gmail.com
+  */
+@ScalaJSDefined
+class CollectionInfo_IdIndex(val v: Int,
+                             val key: js.Any,
+                             val name: String,
+                             val ns: String) extends js.Object
+
+/**
+  * CollectionInfo Info
+  * @author lawrence.daniels@gmail.com
+  */
+@ScalaJSDefined
+class CollectionInfo_Info(val readOnly: Boolean) extends js.Object
+
+/**
   * List Collections Options
   * @param batchSize      The batchSize for the returned command cursor or if pre 2.8 the systems batch collection
   * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
@@ -549,8 +582,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   */
 @ScalaJSDefined
 class ListCollectionsOptions(val batchSize: js.UndefOr[Int] = js.undefined,
-                             val readPreference: js.UndefOr[ReadPreference] = js.undefined)
-  extends js.Object
+                             val readPreference: js.UndefOr[ReadPreference] = js.undefined) extends js.Object
 
 /**
   * Index Information Options
@@ -560,37 +592,21 @@ class ListCollectionsOptions(val batchSize: js.UndefOr[Int] = js.undefined,
   */
 @ScalaJSDefined
 class IndexInformationOptions(val full: js.UndefOr[Boolean] = js.undefined,
-                              val readPreference: js.UndefOr[ReadPreference] = js.undefined)
-  extends js.Object
+                              val readPreference: js.UndefOr[ReadPreference] = js.undefined) extends js.Object
 
 /**
-  * {"name":"listing_activity",
-  * "type":"collection",
-  * "options":{},
-  * "info":{"readOnly":false},
-  * "idIndex":{"v":2,"key":{"_id":1},"name":"_id_","ns":"mi.listing_activity"}}
+  * Command Result
+  * @author lawrence.daniels@gmail.com
   */
 @js.native
-trait CollectionInfo extends js.Object {
-  val name: String = js.native
-  val `type`: String = js.native
-  val options: js.Any = js.native
-  val info: CollectionInfo_Info = js.native
-  val idIndex: CollectionInfo_IdIndex = js.native
-}
+trait CommandResult extends js.Object
 
+/**
+  * Database Statistics
+  * @author lawrence.daniels@gmail.com
+  */
 @js.native
-trait CollectionInfo_Info extends js.Object {
-  val readOnly: Boolean = js.native
-}
-
-@js.native
-trait CollectionInfo_IdIndex extends js.Object {
-  val v: Int = js.native
-  val key: js.Any = js.native
-  val name: String = js.native
-  val ns: String = js.native
-}
+trait DbStats extends js.Object
 
 /**
   * Database Options
@@ -631,8 +647,7 @@ class DbOptions(val authSource: js.UndefOr[String] = js.undefined,
                 val pkFactory: js.UndefOr[js.Any] = js.undefined,
                 val promiseLibrary: js.UndefOr[js.Any] = js.undefined,
                 val readConcern: js.UndefOr[js.Any] = js.undefined,
-                val level: js.UndefOr[js.Any] = js.undefined)
-  extends js.Object
+                val level: js.UndefOr[js.Any] = js.undefined) extends js.Object
 
 /**
   * Database Clone Options
@@ -641,13 +656,30 @@ class DbOptions(val authSource: js.UndefOr[String] = js.undefined,
   */
 @ScalaJSDefined
 class DbSharingOptions(val noListener: js.UndefOr[Boolean] = js.undefined,
-                       val returnNonCachedInstance: js.UndefOr[Boolean] = js.undefined)
-  extends js.Object
+                       val returnNonCachedInstance: js.UndefOr[Boolean] = js.undefined) extends js.Object
 
 /**
   * Database Statistics Options
   * @param scale Divide the returned sizes by scale value.
   */
 @ScalaJSDefined
-class DbStatsOptions(val scale: js.UndefOr[Double] = js.undefined)
-  extends js.Object
+class DbStatsOptions(val scale: js.UndefOr[Double] = js.undefined) extends js.Object
+
+/**
+  * Read Preference Options
+  * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
+  *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
+  */
+@ScalaJSDefined
+class ReadPreferenceOptions(val readPreference: js.UndefOr[ReadPreference | String] = js.undefined) extends js.Object
+
+/**
+  * Remove User Options.
+  * @param w        The write concern
+  * @param wtimeout The write concern timeout.
+  * @param j        Specify a journal write concern..
+  */
+@ScalaJSDefined
+class RemoveUserOptions(val w: js.UndefOr[Int | String] = js.undefined,
+                        val wtimeout: js.UndefOr[Int] = js.undefined,
+                        val j: js.UndefOr[Boolean] = js.undefined) extends js.Object

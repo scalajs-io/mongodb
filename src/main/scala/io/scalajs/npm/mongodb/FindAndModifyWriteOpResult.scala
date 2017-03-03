@@ -7,16 +7,13 @@ import scala.scalajs.js
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-trait FindAndModifyWriteOpResult extends js.Object {
+trait FindAndModifyWriteOpResult extends js.Object with Okayable {
 
   /** Document returned from findAndModify command. */
   var value: js.Any = js.native
 
   /** The raw lastErrorObject returned from the command. */
   var lastErrorObject: js.Any = js.native
-
-  /** Is 1 if the command executed correctly. */
-  var ok: Int = js.native
 
 }
 
@@ -32,9 +29,8 @@ object FindAndModifyWriteOpResult {
     */
   implicit class FindAndModifyWriteOpResultExtensions(val result: FindAndModifyWriteOpResult) extends AnyVal {
 
-    @inline def isOk = result.ok == 1
-
-    @inline def valueAs[T] = Option(result.value).map(_.asInstanceOf[T])
+    @inline
+    def valueAs[T]: Option[T] = Option(result.value).map(_.asInstanceOf[T])
 
   }
 

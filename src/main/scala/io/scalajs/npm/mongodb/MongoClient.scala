@@ -1,7 +1,10 @@
 package io.scalajs.npm.mongodb
 
+import io.scalajs.RawOptions
+
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSImport
+import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.|
 
 /**
   * Mongo Client Module
@@ -12,28 +15,19 @@ import scala.scalajs.js.annotation.JSImport
 @JSImport("mongodb", "MongoClient")
 class MongoClient() extends js.Object {
 
-  def this(server: Server, options: MongoClientOptions) = this()
-
   /**
-    * Close the current db connection, including all the child db instances.
-    * @return a completion promise
+    * Constructor
+    * @param server  the [[Server]]
+    * @param options the [[MongoClientOptions options]]
     */
-  def close(): js.Promise[Unit] = js.native
+  def this(server: Server, options: MongoClientOptions | RawOptions) = this()
 
   /**
     * Close the current db connection, including all the child db instances.
     * Emits close event and calls optional callback.
     * @param callback the callback function
     */
-  def close(callback: js.Function1[MongoError, Any]): Unit = js.native
-
-  /**
-    * Connect to MongoDB using a url
-    * @param url      the given connection URL
-    * @param options  the given [[ConnectionOptions options]]
-    * @return the promise of a [[Db connection]]
-    */
-  def connect(url: String, options: ConnectionOptions): js.Promise[Db] = js.native
+  def close(callback: js.Function1[MongoError, Any] = js.native): js.Promise[Unit] = js.native
 
   /**
     * Connect to MongoDB using a url
@@ -41,14 +35,9 @@ class MongoClient() extends js.Object {
     * @param options  the given [[ConnectionOptions options]]
     * @param callback the callback function
     */
-  def connect(url: String, options: ConnectionOptions, callback: MongoCallback[Db]): Unit = js.native
-
-  /**
-    * Connect to MongoDB using a url
-    * @param url      the given connection URL
-    * @param callback the callback function
-    */
-  def connect(url: String, callback: MongoCallback[Db]): Unit = js.native
+  def connect(url: String,
+              options: ConnectionOptions | RawOptions = js.native,
+              callback: MongoCallback1[Db] = js.native): js.Promise[Db] = js.native
 
   /**
     * Create a new Db instance sharing the current socket connections.
@@ -61,7 +50,7 @@ class MongoClient() extends js.Object {
     * Initializes the database connection
     * @param callback the callback function
     */
-  def open(callback: MongoCallback[Db]): Unit = js.native
+  def open(callback: MongoCallback1[Db] = js.native): js.Promise[Db] = js.native
 
 }
 
@@ -72,3 +61,24 @@ class MongoClient() extends js.Object {
 @js.native
 @JSImport("mongodb", "MongoClient")
 object MongoClient extends MongoClientClass
+
+/**
+  * MongoDB Client Options
+  * @author lawrence.daniels@gmail.com
+  * @see [[https://mongodb.github.io/node-mongodb-native/api-generated/mongoclient.html#connect]]
+  */
+@ScalaJSDefined
+class MongoClientOptions(var w: js.UndefOr[js.Any] = js.undefined,
+                         var wtimeout: js.UndefOr[Int] = js.undefined,
+                         var fsync: js.UndefOr[Boolean] = js.undefined,
+                         var j: js.UndefOr[Boolean] = js.undefined,
+                         var readPreference: js.UndefOr[String] = js.undefined,
+                         var native_parser: js.UndefOr[Boolean] = js.undefined,
+                         var forceServerObjectId: js.UndefOr[Boolean] = js.undefined,
+                         var pkFactory: js.UndefOr[js.Object] = js.undefined,
+                         var serializeFunctions: js.UndefOr[Boolean] = js.undefined,
+                         var raw: js.UndefOr[Boolean] = js.undefined,
+                         var recordQueryStats: js.UndefOr[Boolean] = js.undefined,
+                         var retryMiliSeconds: js.UndefOr[Int] = js.undefined,
+                         var numberOfRetries: js.UndefOr[Int] = js.undefined,
+                         var bufferMaxEntries: js.UndefOr[Int] = js.undefined) extends js.Object

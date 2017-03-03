@@ -6,10 +6,10 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
 /**
-  * Grid Store Stream
-  * @author lawrence.daniels@gmail.com
+  * Create a new GridStoreStream instance (INTERNAL TYPE, do not instantiate directly)
+  * @return [[GridStoreStream]] instance.
   */
-@deprecated("Use GridFSBucket API instead", since = "2.2")
 @js.native
 @JSImport("mongodb", "GridStoreStream")
+@deprecated("Use GridFSBucket API instead", since = "2.1")
 class GridStoreStream() extends IDuplex

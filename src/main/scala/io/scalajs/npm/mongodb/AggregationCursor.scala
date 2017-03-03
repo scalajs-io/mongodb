@@ -26,15 +26,11 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
 
   /**
     * Close the cursor, sending a AggregationCursor command and emitting close.
+    * @param callback this optional callbak will be called after executing this method.
+    *                 The first parameter will always contain null while;
+    *                 The second parameter will contain a reference to this cursor.
     */
-  def close(): js.Promise[this.type] = js.native
-
-  /**
-    * Close the cursor, sending a AggregationCursor command and emitting close.
-    * @param callback this will be called after executing this method. The first parameter will always contain null
-    *                 while the second parameter will contain a reference to this cursor.
-    */
-  def close(callback: MongoCallback[this.type]): Unit = js.native
+  def close(callback: MongoCallback1[this.type] = js.native): js.Promise[this.type] = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -46,7 +42,7 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 will contain the Error object if an error occurred, or null otherwise. While the second parameter
     *                 will contain the document.
     */
-  def each(callback: MongoCallback[T]): Unit = js.native
+  def each(callback: MongoCallback1[T]): Unit = js.native
 
   /**
     * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
@@ -54,7 +50,7 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 the second parameter will be an object containing the details.
     * @example explain(callback)
     */
-  def explain(callback: MongoCallback[js.Any]): Unit = js.native
+  def explain(callback: MongoCallback1[js.Any]): Unit = js.native
 
   /**
     * Check if the cursor is closed or open.
@@ -78,6 +74,6 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
     */
-  def toArray(callback: MongoCallback[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback1[js.Array[T]]): Unit = js.native
 
 }

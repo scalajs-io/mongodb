@@ -31,23 +31,10 @@ object DeleteWriteOpResult {
     * @author lawrence.daniels@gmail.com
     */
   @js.native
-  trait Outcome extends js.Object {
-
-    /** Is 1 if the command executed correctly. */
-    var ok: Int = js.native
+  trait Outcome extends js.Object with Okayable {
 
     /** The total count of documents deleted. */
     var n: Int = js.native
-  }
-
-  /**
-    * Delete Outcome Extensions
-    * @author lawrence.daniels@gmail.com
-    */
-  implicit class OutcomeExtensions(val outcome: Outcome) extends AnyVal {
-
-    def isOk = outcome.ok == 1
-
   }
 
 }

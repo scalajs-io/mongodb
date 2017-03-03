@@ -41,9 +41,8 @@ object InsertWriteOpResult {
     */
   implicit class WriteResultExtensions(val result: InsertWriteOpResult) extends AnyVal {
 
-    @inline def isOk = result.insertedCount >= 1
-
-    @inline def opsAs[T]: js.Array[T] = result.ops.asInstanceOf[js.Array[T]]
+    @inline
+    def opsAs[T]: js.Array[T] = result.ops.asInstanceOf[js.Array[T]]
 
   }
 
@@ -52,10 +51,7 @@ object InsertWriteOpResult {
     * @author lawrence.daniels@gmail.com
     */
   @js.native
-  trait Result extends js.Object {
-    // ok == 1 when successful
-    var ok: Int = js.native
-
+  trait Result extends js.Object with Okayable {
     // Is 1 if the command executed correctly.
     var n: Int = js.native // The total count of documents inserted.
   }

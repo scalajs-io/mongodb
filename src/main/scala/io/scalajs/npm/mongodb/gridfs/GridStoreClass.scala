@@ -2,7 +2,6 @@ package io.scalajs.npm.mongodb.gridfs
 
 import io.scalajs.npm.mongodb.{Db, _}
 
-import scala.concurrent.Future
 import scala.scalajs.js
 import scala.scalajs.js.Array
 
@@ -138,52 +137,54 @@ object GridStoreClass {
       * Checks if a file exists in the database.
       */
     @inline
-    def existFuture(db: Db, name: String, rootCollection: String): Future[GridStore] = {
-      callbackMongoFuture[GridStore](`class`.exist(db, name, rootCollection, _))
+    def existFuture(db: Db, name: String, rootCollection: String): js.Promise[GridStore] = {
+      promiseMongoCallback1[GridStore](`class`.exist(db, name, rootCollection, _))
     }
 
     /**
       * Checks if a file exists in the database.
       */
     @inline
-    def existFuture(db: Db, name: String): Future[GridStore] =
-      callbackMongoFuture[GridStore](`class`.exist(db, name, _))
+    def existFuture(db: Db, name: String): js.Promise[GridStore] =
+    promiseMongoCallback1[GridStore](`class`.exist(db, name, _))
 
     /**
       * Gets the list of files stored in the GridFS.
       */
     @inline
-    def listFuture(db: Db, rootCollection: String): Future[Array[String]] = {
-      callbackMongoFuture[js.Array[String]](`class`.list(db, rootCollection, _))
+    def listFuture(db: Db, rootCollection: String): js.Promise[Array[String]] = {
+      promiseMongoCallback1[js.Array[String]](`class`.list(db, rootCollection, _))
     }
 
     /**
       * Gets the list of files stored in the GridFS.
       */
     @inline
-    def listFuture(db: Db): Future[Array[String]] = callbackMongoFuture[js.Array[String]](`class`.list(db, _))
-
-    /**
-      * Reads the contents of a file.
-      */
-    @inline
-    def readFuture[T <: js.Any](db: Db, name: String): Future[Array[T]] =
-      callbackMongoFuture[js.Array[T]](`class`.read(db, name, _))
-
-    /**
-      * Reads the contents of a file.
-      */
-    @inline
-    def readFuture[T <: js.Any](db: Db, name: String, length: Int): Future[Array[T]] = {
-      callbackMongoFuture[js.Array[T]](`class`.read(db, name, length, _))
+    def listFuture(db: Db): js.Promise[Array[String]] = {
+      promiseMongoCallback1[js.Array[String]](`class`.list(db, _))
     }
 
     /**
       * Reads the contents of a file.
       */
     @inline
-    def readFuture[T <: js.Any](db: Db, name: String, length: Int, offset: Int): Future[Array[T]] = {
-      callbackMongoFuture[js.Array[T]](`class`.read(db, name, length, offset, _))
+    def readFuture[T <: js.Any](db: Db, name: String): js.Promise[Array[T]] =
+    promiseMongoCallback1[js.Array[T]](`class`.read(db, name, _))
+
+    /**
+      * Reads the contents of a file.
+      */
+    @inline
+    def readFuture[T <: js.Any](db: Db, name: String, length: Int): js.Promise[Array[T]] = {
+      promiseMongoCallback1[js.Array[T]](`class`.read(db, name, length, _))
+    }
+
+    /**
+      * Reads the contents of a file.
+      */
+    @inline
+    def readFuture[T <: js.Any](db: Db, name: String, length: Int, offset: Int): js.Promise[Array[T]] = {
+      promiseMongoCallback1[js.Array[T]](`class`.read(db, name, length, offset, _))
     }
 
     /**
@@ -194,16 +195,16 @@ object GridStoreClass {
                                 name: String,
                                 length: Int,
                                 offset: Int,
-                                options: GridStoreOptions): Future[Array[T]] = {
-      callbackMongoFuture[js.Array[T]](`class`.read(db, name, length, offset, options, _))
+                                options: GridStoreOptions): js.Promise[Array[T]] = {
+      promiseMongoCallback1[js.Array[T]](`class`.read(db, name, length, offset, options, _))
     }
 
     /**
       * Reads the data of this file.
       */
     @inline
-    def readlinesFuture(db: Db, name: String, separator: String, options: GridStoreOptions): Future[Array[String]] = {
-      callbackMongoFuture[js.Array[String]](`class`.readlines(db, name, separator, options, _))
+    def readlinesFuture(db: Db, name: String, separator: String, options: GridStoreOptions): js.Promise[Array[String]] = {
+      promiseMongoCallback1[js.Array[String]](`class`.readlines(db, name, separator, options, _))
     }
 
   }

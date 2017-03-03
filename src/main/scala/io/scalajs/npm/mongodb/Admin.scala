@@ -29,21 +29,31 @@ object Admin {
     * Mongo Administrative Extensions
     * @author lawrence.daniels@gmail.com
     */
-  implicit class MongoAdminEnrich(val admin: Admin) extends AnyVal {
+  implicit class MongoAdminEnrichment(val admin: Admin) extends AnyVal {
 
     @inline
-    def profilingInfoFuture(name: String) = callbackMongoFuture[ProfilingInfo](admin.profilingInfo)
+    def profilingInfoAsync(name: String): js.Promise[ProfilingInfo] =
+      promiseMongoCallback1[ProfilingInfo](admin.profilingInfo)
 
     @inline
-    def profilingLevelFuture(name: String) = callbackMongoFuture[String](admin.profilingLevel)
+    def profilingLevelAsync(name: String): js.Promise[String] =
+      promiseMongoCallback1[String](admin.profilingLevel)
 
     @inline
-    def setProfilingLevelFuture(level: String) = callbackMongoFuture[String](admin.setProfilingLevel(level, _))
+    def setProfilingLevelAsync(level: String): js.Promise[String] =
+      promiseMongoCallback1[String](admin.setProfilingLevel(level, _))
 
     @inline
-    def validateCollection(collectionName: String) =
-      callbackMongoFuture[ValidationResult](admin.validateCollection(collectionName, _))
+    def validateCollectionAsync(collectionName: String): js.Promise[ValidationResult] =
+      promiseMongoCallback1[ValidationResult](admin.validateCollection(collectionName, _))
 
   }
 
 }
+
+/**
+  * Validation Result
+  * @author lawrence.daniels@gmail.com
+  */
+@js.native
+trait ValidationResult extends js.Object

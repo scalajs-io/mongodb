@@ -2,7 +2,6 @@ package io.scalajs.npm.mongodb
 
 import io.scalajs.{RawOptions, nodejs}
 
-import scala.concurrent.Promise
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
 import scala.scalajs.js.|
@@ -31,22 +30,15 @@ trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Sets the batch size parameter of this cursor to the given value.
-    * @param size the new batch size.
-    * @return a promise of the [[Cursor]]
-    * @example batchSize(size[, callback])
-    */
-  def batchSize(size: Int): js.Promise[this.type] = js.native
-
-  /**
-    * Sets the batch size parameter of this cursor to the given value.
     * @param size     the new batch size.
     * @param callback this optional callback will be called after executing this method. The first parameter will
     *                 contain an error object when the batchSize given is not a valid number or when the cursor is
     *                 already closed while the second parameter will contain a reference to this object upon successful
     *                 execution.
+    * @return a promise of the [[Cursor]] if the  callback was not passed
     * @example batchSize(size[, callback])
     */
-  def batchSize(size: Int, callback: MongoCallback[this.type]): Unit = js.native
+  def batchSize(size: Int, callback: MongoCallback1[this.type] = js.native): js.Promise[this.type] = js.native
 
   /**
     * Clone the cursor
@@ -55,16 +47,11 @@ trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Close the cursor, sending a KillCursor command and emitting close.
-    * @return a promise of the [[Cursor]]
-    */
-  def close(): Promise[this.type] = js.native
-
-  /**
-    * Close the cursor, sending a KillCursor command and emitting close.
     * @param callback this will be called after executing this method. The first parameter will always contain null
     *                 while the second parameter will contain a reference to this cursor.
+    * @return a promise of the [[Cursor]] if the callback was not passed
     */
-  def close(callback: MongoCallback[this.type]): Unit = js.native
+  def close(callback: MongoCallback1[this.type] = js.native): js.Promise[this.type] = js.native
 
   /**
     * Set the collation options for the cursor.
@@ -84,25 +71,16 @@ trait Cursor[T] extends nodejs.stream.Readable {
   /**
     * Determines how many result the query for this cursor will return
     * @param applySkipLimit if set to true will apply the skip and limits set on the cursor. Defaults to false.
-    * @param options        the optional settings.
-    * @return a promise of the count
-    * @example count(applySkipLimit, [options])
-    */
-  def count(applySkipLimit: Boolean = js.native,
-            options: CountOptions | RawOptions = js.native): Promise[Int] = js.native
-
-  /**
-    * Determines how many result the query for this cursor will return
-    * @param applySkipLimit if set to true will apply the skip and limits set on the cursor. Defaults to false.
     * @param callback       this will be called after executing this method. The first parameter will contain the Error
     *                       object if an error occurred, or null otherwise. While the second parameter will contain the
     *                       number of results or null if an error occurred.
     * @param options        the optional settings.
-    * @example count(applySkipLimit, [options], callback)
+    * @return a promise of the count if the  callback was not passed
+    * @example count(applySkipLimit, [options], [callback])
     */
   def count(applySkipLimit: Boolean,
             options: CountOptions | RawOptions,
-            callback: MongoCallback[Int]): Unit = js.native
+            callback: MongoCallback1[Int]): js.Promise[Int] = js.native
 
   /**
     * Determines how many result the query for this cursor will return
@@ -110,9 +88,10 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param callback       this will be called after executing this method. The first parameter will contain the Error
     *                       object if an error occurred, or null otherwise. While the second parameter will contain the
     *                       number of results or null if an error occurred.
-    * @example count(applySkipLimit, [options], callback)
+    * @return a promise of the count if the  callback was not passed
+    * @example count(applySkipLimit, [options], [callback])
     */
-  def count(applySkipLimit: Boolean, callback: MongoCallback[Int]): Unit = js.native
+  def count(applySkipLimit: Boolean, callback: MongoCallback1[Int]): js.Promise[Int] = js.native
 
   /**
     * Iterates over all the documents for this cursor. As with {cursor.toArray}, not all of the elements will be
@@ -125,7 +104,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                 will contain the document.
     */
   @deprecated(message = "No alternatives specified", since = "2.2")
-  def each(callback: MongoCallback[T]): Unit = js.native
+  def each(callback: MongoCallback1[T]): Unit = js.native
 
   /**
     * Gets a detailed information about how the query is performed on this cursor and how long it took the database to process it.
@@ -146,7 +125,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param iterator The iteration callback.
     * @param callback The end callback.
     */
-  def forEach(iterator: js.Function1[T, Any], callback: MongoCallback[T]): Unit = js.native
+  def forEach(iterator: js.Function1[T, Any], callback: MongoCallback1[T]): Unit = js.native
 
   /**
     * Set the cursor hint
@@ -162,13 +141,10 @@ trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Sets the limit parameter of this cursor to the given value.
-    * @param limit    the new limit.
-    * @param callback this optional callback will be called after executing this method. The first parameter will
-    *                 contain an error object when the limit given is not a valid number or when the cursor is already
-    *                 closed while the second parameter will contain a reference to this object upon successful execution.
-    * @example limit(limit[, callback])
+    * @param value The limit for the cursor query.
+    * @return the [[Cursor]]
     */
-  def limit(limit: Int, callback: js.Function = js.native): this.type = js.native
+  def limit(value: Int): this.type = js.native
 
   /**
     * Map all documents using the provided function
@@ -220,27 +196,15 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param callback The result callback.
     * @return [[js.Promise promise]] if no callback passed
     */
-  def next(callback: js.Function): Unit = js.native
-
-  /**
-    * Get the next available document from the cursor, returns null if no more documents are available.
-    * @return [[js.Promise promise]] if no callback passed
-    */
-  def next(): js.Promise[T] = js.native
+  def next(callback: MongoCallback1[T] = js.native): js.Promise[T] = js.native
 
   /**
     * Gets the next document from the cursor.
     * @param callback The result callback.
     * @return [[js.Promise promise]] if no callback passed
     */
-  def nextObject(callback: MongoCallback[T]): Unit = js.native
-
-  /**
-    * Gets the next document from the cursor.
-    * @return [[js.Promise promise]] if no callback passed
-    */
   @deprecated("Use next() instead", since = "2.0")
-  def nextObject(): js.Promise[T] = js.native
+  def nextObject(callback: MongoCallback1[T] = js.native): js.Promise[T] = js.native
 
   /**
     * Sets a field projection for the query.
@@ -264,32 +228,33 @@ trait Cursor[T] extends nodejs.stream.Readable {
 
   /**
     * Sets the read preference for the cursor
-    * @param pref     read preference for the cursor, one of [[Server.READ_PRIMARY Server.READ_PRIMARY]],
-    *                 [[Server.READ_SECONDARY Server.READ_SECONDARY]], [[Server.READ_SECONDARY Server.READ_SECONDARY_ONLY]]
-    * @param callback this optional callback will be called after executing this method. The first parameter will
-    *                 contain an error object when the read preference given is not a valid number or when the cursor
-    *                 is already closed while the second parameter will contain a reference to this object upon
-    *                 successful execution.
-    * @example setReadPreference(pref[, callback])
+    * @param readPreference The new read preference for the cursor.
+    * @example setReadPreference(pref)
     */
-  def setReadPreference(pref: String, callback: js.Function = js.native): this.type = js.native
+  def setReadPreference(readPreference: ReadPreference | String): this.type = js.native
 
   /**
     * Set the cursor showRecordId
     * @param enable The $showDiskLoc option has now been deprecated and replaced with the showRecordId field.
     *               $showDiskLoc will still be accepted for OP_QUERY stye find.
+    * @return the [[Cursor]]
     */
   def showRecordId(enable: Boolean): this.type = js.native
 
   /**
-    * Sets the skip parameter of this cursor to the given value.
-    * @param skip     the new skip value.
-    * @param callback this optional callback will be called after executing this method. The first parameter will contain
-    *                 an error object when the skip value given is not a valid number or when the cursor is already closed
-    *                 while the second parameter will contain a reference to this object upon successful execution.
-    * @example skip(skip[, callback])
+    * Set the skip for the cursor.
+    * @param value The skip for the cursor query.
+    * @return the [[Cursor]]
     */
-  def skip(skip: Int, callback: js.Function = js.native): this.type = js.native
+  def skip(value: Int): this.type = js.native
+
+  /**
+    * Set the cursor snapshot
+    * @param snapshot The $snapshot operator prevents the cursor from returning a document more than once
+    *                 because an intervening write operation results in a move of the document.
+    * @return the [[Cursor]]
+    */
+  def snapshot(snapshot: js.Any): this.type = js.native
 
   /**
     * Sets the sort parameter of this cursor to the given value.
@@ -336,28 +301,11 @@ trait Cursor[T] extends nodejs.stream.Readable {
   def snapshot(enable: Boolean): this.type = js.native
 
   /**
-    * Returns a Node Transform Stream interface for this cursor.
-    * {{{
-    *   var stream = collection.find({mykey:{$ne:2}}).stream();
-    *   stream.on("data", function(item) {});
-    *   stream.on("end", function() {});
-    * }}}
-    * @return returns a [[CursorStream stream object]].
+    * Return a modified Readable stream including a possible transform method.
+    * @param options the optional settings
+    * @return returns a [[Cursor]].
     */
-  def stream(): CursorStream = js.native
-
-  /**
-    * Returns a Node Transform Stream interface for this cursor.
-    * @return returns a [[CursorStream stream object]].
-    */
-  def stream(transform: StreamTransform): this.type = js.native
-
-  /**
-    * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
-    * the results. Note that the array only contain partial results when this cursor had been previously accessed.
-    * In that case, cursor.rewind() can be used to reset the cursor.
-    */
-  def toArray(): js.Promise[js.Array[T]] = js.native
+  def stream(options: CursorStreamOptions): this.type = js.native
 
   /**
     * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
@@ -367,7 +315,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
     */
-  def toArray(callback: MongoCallback[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback1[js.Array[T]] = js.native): js.Promise[js.Array[T]] = js.native
 
 }
 
@@ -415,3 +363,69 @@ class CountOptions(val skip: js.UndefOr[Int] = js.undefined,
                    val maxTimeMS: js.UndefOr[Int] = js.undefined,
                    val hint: js.UndefOr[String] = js.undefined,
                    val readPreference: js.UndefOr[ReadPreference | String] = js.undefined) extends js.Object
+
+/**
+  * Cursor Options
+  * @param skip                  the number of documents to skip.
+  * @param limit                 the number of results to return. -1 has a special meaning and is used by Db.eval.
+  *                              A value of 1 will also be treated as if it were -1.
+  * @param sort                  {Array | Object}, set to sort the documents coming back from the query. Array of indexes, [[‘a’, 1]] etc.
+  * @param hint                  {Object}, hint force the query to use a specific index.
+  * @param explain               return the explaination of the query.
+  * @param snapshot              Snapshot mode assures no duplicates are returned.
+  * @param timeout               the allow the query to timeout.
+  * @param tailable              allow the cursor to be tailable.
+  * @param awaitdata             allow the cursor to wait for data, only applicable for tailable cursor.
+  * @param oplogReplay           sets an internal flag, only applicable for tailable cursor.
+  * @param batchSize             batchSize the number of the subset of results to request the database to return for every request.
+  *                              This should initially be greater than 1 otherwise the database will automatically close the cursor.
+  *                              The batch size can be set to 1 with cursorInstance.batchSize after performing the initial query to the database.
+  * @param raw                   return all query documents as raw buffers (default false).
+  * @param read                  specify override of read from source (primary/secondary).
+  * @param returnKey             only return the index key.
+  * @param maxScan               limit the number of items to scan.
+  * @param min                   set minimum index bounds.
+  * @param max                   set maximum index bounds.
+  * @param maxTimeMS             the number of miliseconds to wait before aborting the query.
+  * @param showDiskLoc           show disk location of results.
+  * @param comment               you can put a $comment field on a query to make looking in the profiler logs simpler.
+  * @param numberOfRetries       if using awaidata specifies the number of times to retry on timeout.
+  * @param dbName                override the default dbName.
+  * @param tailableRetryInterval specify the miliseconds between getMores on tailable cursor.
+  * @param exhaust               have the server send all the documents at once as getMore packets.
+  * @param partial               have the sharded system return a partial result from mongos.
+  */
+@ScalaJSDefined
+class CursorOptions(var skip: js.UndefOr[Int] = js.undefined,
+                    var limit: js.UndefOr[Int] = js.undefined,
+                    var sort: js.Any = null,
+                    var hint: js.UndefOr[js.Object] = js.undefined,
+                    var explain: js.UndefOr[Boolean] = js.undefined,
+                    var snapshot: js.UndefOr[Boolean] = js.undefined,
+                    var timeout: js.UndefOr[Boolean] = js.undefined,
+                    var tailable: js.UndefOr[Boolean] = js.undefined,
+                    var awaitdata: js.UndefOr[Boolean] = js.undefined,
+                    var oplogReplay: js.UndefOr[Boolean] = js.undefined,
+                    var batchSize: js.UndefOr[Int] = js.undefined,
+                    var raw: js.UndefOr[Boolean] = js.undefined,
+                    var read: js.UndefOr[Boolean] = js.undefined,
+                    var returnKey: js.UndefOr[Boolean] = js.undefined,
+                    var maxScan: js.UndefOr[Int] = js.undefined,
+                    var min: js.UndefOr[Int] = js.undefined,
+                    var max: js.UndefOr[Int] = js.undefined,
+                    var maxTimeMS: js.UndefOr[Int] = js.undefined,
+                    var showDiskLoc: js.UndefOr[Boolean] = js.undefined,
+                    var comment: js.UndefOr[String] = js.undefined,
+                    var numberOfRetries: js.UndefOr[Int] = js.undefined,
+                    var dbName: js.UndefOr[String] = js.undefined,
+                    var tailableRetryInterval: js.UndefOr[Int] = js.undefined,
+                    var exhaust: js.UndefOr[Boolean] = js.undefined,
+                    var partial: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Cursor Stream Options
+  * @param transform A transformation method applied to each document emitted by the stream.
+  * @author lawrence.daniels@gmail.com
+  */
+@ScalaJSDefined
+class CursorStreamOptions(var transform: js.UndefOr[js.Function] = js.undefined) extends js.Object

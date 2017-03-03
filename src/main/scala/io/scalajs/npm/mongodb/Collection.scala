@@ -1,10 +1,14 @@
 package io.scalajs.npm.mongodb
 
+import java.lang.{Boolean => JBoolean}
+
 import io.scalajs.RawOptions
 import io.scalajs.util.PromiseHelper._
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{Future, Promise}
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
+import scala.scalajs.js.annotation.ScalaJSDefined
 import scala.scalajs.js.|
 
 /**
@@ -24,7 +28,7 @@ trait Collection extends js.Object {
     */
   def aggregate[A <: js.Any](pipeline: js.Array[_ <: js.Any],
                              options: AggregationOptions,
-                             callback: MongoCallback[js.Array[A]]): Unit = js.native
+                             callback: MongoCallback1[js.Array[A]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
@@ -33,7 +37,7 @@ trait Collection extends js.Object {
     * @example aggregate(pipeline, options, callback)
     */
   def aggregate[A <: js.Any](pipeline: js.Array[_ <: js.Any],
-                             callback: MongoCallback[js.Array[A]]): Unit = js.native
+                             callback: MongoCallback1[js.Array[A]]): Unit = js.native
 
   /**
     * Execute an aggregation framework pipeline against the collection, needs MongoDB >= 2.2
@@ -52,7 +56,7 @@ trait Collection extends js.Object {
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
                              options: RawOptions,
-                             callback: MongoCallback[BulkWriteOpResultObject]): Unit = js.native
+                             callback: MongoCallback1[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -61,7 +65,7 @@ trait Collection extends js.Object {
     * @example bulkWrite(operations, options, callback)
     */
   def bulkWrite[A <: js.Any](operations: js.Array[A],
-                             callback: MongoCallback[BulkWriteOpResultObject]): Unit = js.native
+                             callback: MongoCallback1[BulkWriteOpResultObject]): Unit = js.native
 
   /**
     * Perform a bulkWrite operation without a fluent API
@@ -79,15 +83,9 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example count(query, options, callback)
     */
-  def count(query: js.Any, options: RawOptions, callback: js.Function2[MongoError, Int, Any]): Unit = js.native
-
-  /**
-    * Count number of matching documents in the db to a query.
-    * @param query   The query for the count.
-    * @param options Optional settings.
-    * @example count(query, options, callback)
-    */
-  def count(query: js.Any, options: RawOptions = null): js.Promise[Int] = js.native
+  def count(query: js.Any,
+            options: RawOptions = js.native,
+            callback: MongoCallback1[Int] = js.native): js.Promise[Int] = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -98,7 +96,7 @@ trait Collection extends js.Object {
     */
   def createIndex(fieldOrSpec: js.Any,
                   options: IndexOptions | RawOptions,
-                  callback: js.Function2[MongoError, String, Any]): Unit = js.native
+                  callback: MongoCallback1[String]): Unit = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -106,7 +104,7 @@ trait Collection extends js.Object {
     * @param callback    The command result callback
     * @example createIndex(fieldOrSpec, options[, callback])
     */
-  def createIndex(fieldOrSpec: js.Any, callback: js.Function2[MongoError, String, Any]): Unit = js.native
+  def createIndex(fieldOrSpec: js.Any, callback: MongoCallback1[String]): Unit = js.native
 
   /**
     * Creates an index on the db and collection collection.
@@ -136,7 +134,7 @@ trait Collection extends js.Object {
     */
   def deleteMany(filter: js.Any,
                  options: DeleteOptions,
-                 callback: MongoCallback[DeleteWriteOpResult]): Unit = js.native
+                 callback: MongoCallback1[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -144,7 +142,7 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     * @example deleteMany(filter, options, callback)
     */
-  def deleteMany(filter: js.Any, callback: MongoCallback[DeleteWriteOpResult]): Unit = js.native
+  def deleteMany(filter: js.Any, callback: MongoCallback1[DeleteWriteOpResult]): Unit = js.native
 
   /**
     * Delete multiple documents on MongoDB
@@ -189,16 +187,12 @@ trait Collection extends js.Object {
 
   /**
     * Drop the collection from the database, removing it permanently. New accesses will create a new collection.
-    * @param callback The command result callback
-    * @example drop(callback)
+    * @param options  the optional settings
+    * @param callback The optional command result callback
+    * @return a completion promise, if the callback was not passed
+    * @example drop([callback]): Promise
     */
-  def drop(callback: js.Function1[MongoError, Any]): Unit = js.native
-
-  /**
-    * Drop the collection from the database, removing it permanently. New accesses will create a new collection.
-    * @example drop(callback)
-    */
-  def drop(): js.Promise[js.Any] = js.native
+  def drop(options: RawOptions = js.native, callback: js.Function1[MongoError, Any] = js.native): js.Promise[js.Any] = js.native
 
   /**
     * Drops all indexes from this collection.
@@ -226,39 +220,35 @@ trait Collection extends js.Object {
 
   /**
     * Ensures that an index exists, if it does not it creates it
+    * @param name        The index name
     * @param fieldOrSpec Defines the index.
     * @param options     Optional settings.
     * @param callback    The command result callback
+    * @return a completion promise if the callback is not present
     * @example ensureIndex(fieldOrSpec, options, callback)
     */
-  def ensureIndex(fieldOrSpec: js.Any, options: IndexOptions | RawOptions, callback: js.Function): Unit = js.native
-
-  /**
-    * Ensures that an index exists, if it does not it creates it
-    * @param fieldOrSpec Defines the index.
-    * @param options     Optional settings.
-    * @return ????
-    * @example ensureIndex(fieldOrSpec, options)
-    */
-  def ensureIndex(fieldOrSpec: js.Any, options: IndexOptions | RawOptions): js.Promise[js.Any] = js.native
+  def ensureIndex(name: String,
+                  fieldOrSpec: js.Any,
+                  options: IndexOptions | RawOptions = js.native,
+                  callback: js.Function = js.native): js.Promise[js.Any] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find[T](): Cursor[T] = js.native
+  def find[A](): Cursor[A] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find[T](selector: js.Any): Cursor[T] = js.native
+  def find[A](selector: js.Any): Cursor[A] = js.native
 
   /**
     * Creates a cursor for a query that can be used to iterate over results from MongoDB
     * @example {{{ find([selector[, projection]]) }}}
     */
-  def find[T](selector: js.Any, projection: js.Any): Cursor[T] = js.native
+  def find[A](selector: js.Any, projection: js.Any): Cursor[A] = js.native
 
   /**
     * Find and update a document.
@@ -290,10 +280,10 @@ trait Collection extends js.Object {
     * @example findAndModify(query, sort, doc, options, callback)
     */
   @deprecated("Use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead", since = "2.0")
-  def findAndModify[T <: js.Any](query: js.Any,
+  def findAndModify[A <: js.Any](query: js.Any,
                                  sort: js.Array[js.Any],
                                  doc: js.Any,
-                                 options: RawOptions = null): js.Promise[T] = js.native
+                                 options: RawOptions = null): js.Promise[A] = js.native
 
   /**
     * Find and remove a document.
@@ -312,14 +302,14 @@ trait Collection extends js.Object {
     * @param options Optional settings.
     * @example findAndRemove(query, sort, options, callback)
     */
-  def findAndRemove[T](query: js.Any, sort: js.Array[js.Any], options: RawOptions): js.Promise[T] = js.native
+  def findAndRemove[A](query: js.Any, sort: js.Array[js.Any], options: RawOptions): js.Promise[A] = js.native
 
   /**
     * Fetches the first document that matches the query
     * @param query    Query for find Operation
     * @param options  Optional settings.
     * @param callback The command result callback
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     * @example findOne(query[, options], callback)
     */
   @deprecated("Use find().limit(1).next(function(err, doc){})", since = "2.0")
@@ -338,11 +328,11 @@ trait Collection extends js.Object {
     * Fetches the first document that matches the query
     * @param query   Query for find Operation
     * @param options Optional settings.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     * @example findOne(query[, options], callback)
     */
   @deprecated("Use find().limit(1).next(function(err, doc){})", since = "2.0")
-  def findOne[T <: js.Any](query: js.Any, options: RawOptions = null): js.Promise[T] = js.native
+  def findOne[A <: js.Any](query: js.Any, options: RawOptions = js.native): js.Promise[A] = js.native
 
   /**
     * Find a document and delete it in one atomic operation, requires a write lock for the duration of the operation.
@@ -453,15 +443,15 @@ trait Collection extends js.Object {
     * @param indexes  One or more index names to check.
     * @param callback The command result callback
     * @example indexExists(indexes, callback)
-    * @return Promise if no callback passed
+    * @return Promise 
     */
-  def indexExists(indexes: js.Array[String], callback: MongoCallback[Boolean]): Unit = js.native
+  def indexExists(indexes: js.Array[String], callback: MongoCallback1[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
     * @param indexes One or more index names to check.
     * @example indexExists(indexes, callback)
-    * @return Promise if no callback passed
+    * @return Promise 
     */
   def indexExists(indexes: js.Array[String]): js.Promise[Boolean] = js.native
 
@@ -470,15 +460,15 @@ trait Collection extends js.Object {
     * @param indexes  One or more index names to check.
     * @param callback The command result callback
     * @example indexExists(indexes, callback)
-    * @return Promise if no callback passed
+    * @return Promise 
     */
-  def indexExists(indexes: String, callback: MongoCallback[Boolean]): Unit = js.native
+  def indexExists(indexes: String, callback: MongoCallback1[Boolean]): Unit = js.native
 
   /**
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
     * @param indexes One or more index names to check.
     * @example indexExists(indexes, callback)
-    * @return Promise if no callback passed
+    * @return Promise 
     */
   def indexExists(indexes: String): js.Promise[Boolean] = js.native
 
@@ -523,7 +513,7 @@ trait Collection extends js.Object {
     * @param doc Document to insert.
     */
   @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
-  def insert(doc: js.Any, callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
+  def insert(doc: js.Any, callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts a single document or a an array of documents into MongoDB. If documents passed in do not contain
@@ -535,7 +525,7 @@ trait Collection extends js.Object {
   @deprecated("Use insertOne, insertMany or bulkWrite", since = "2.0")
   def insert(doc: js.Any,
              options: WriteOptions | RawOptions,
-             callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
+             callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -548,7 +538,7 @@ trait Collection extends js.Object {
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
                               options: WriteOptions | RawOptions,
-                              callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
+                              callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -559,7 +549,7 @@ trait Collection extends js.Object {
     * @example insertMany(docs, options, callback): Promise
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
-                              callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
+                              callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Inserts an array of documents into MongoDB. If documents passed in do not contain the _id field, one will be
@@ -582,20 +572,14 @@ trait Collection extends js.Object {
     */
   def insertOne(doc: js.Any,
                 options: WriteOptions | RawOptions,
-                callback: MongoCallback[InsertWriteOpResult]): Unit = js.native
-
-  /**
-    * Returns if the collection is a capped collection
-    * @example isCapped(callback): Promise
-    */
-  def isCapped(): js.Promise[Boolean] = js.native
+                callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
 
   /**
     * Returns if the collection is a capped collection
     * @param callback The command result callback
     * @example isCapped(callback): Promise
     */
-  def isCapped(callback: MongoCallback[Boolean]): Unit = js.native
+  def isCapped(callback: MongoCallback1[Boolean] = js.native): js.Promise[Boolean] = js.native
 
   /**
     * Get the list of all indexes information for the collection.
@@ -609,7 +593,7 @@ trait Collection extends js.Object {
     * @param reduce   The reduce function.
     * @param options  Optional settings.
     * @param callback The command result callback.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def mapReduce(map: js.Function, reduce: js.Function, options: RawOptions, callback: js.Function): Unit = js.native
 
@@ -619,7 +603,7 @@ trait Collection extends js.Object {
     * @param reduce   The reduce function.
     * @param options  Optional settings.
     * @param callback The command result callback.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def mapReduce(map: js.Function, reduce: String, options: RawOptions, callback: js.Function): Unit = js.native
 
@@ -629,7 +613,7 @@ trait Collection extends js.Object {
     * @param reduce   The reduce function.
     * @param options  Optional settings.
     * @param callback The command result callback.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def mapReduce(map: String, reduce: js.Function, options: RawOptions, callback: js.Function): Unit = js.native
 
@@ -639,7 +623,7 @@ trait Collection extends js.Object {
     * @param reduce   The reduce function.
     * @param options  Optional settings.
     * @param callback The command result callback.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def mapReduce(map: String, reduce: String, options: RawOptions, callback: js.Function): Unit = js.native
 
@@ -648,13 +632,7 @@ trait Collection extends js.Object {
     * @param callback The results callback
     * @return the options of the collection.
     */
-  def options(callback: js.Function): Unit = js.native
-
-  /**
-    * Returns the options of the collection.
-    * @return the options of the collection.
-    */
-  def options[T <: js.Any](): js.Promise[T] = js.native
+  def options[A](callback: MongoCallback1[A] = js.native): js.Promise[A] = js.native
 
   /**
     * Return N number of parallel cursors for a collection allowing parallel reading of entire collection.
@@ -700,18 +678,12 @@ trait Collection extends js.Object {
     * Rename the collection.
     * @param newName  New name of of the collection.
     * @param options  Optional settings.
-    * @param callback The results callback
-    * @return [[js.Promise]] if no callback passed
+    * @param callback the optional callback
+    * @return a [[js.Promise completion promise]]
     */
-  def rename(newName: String, options: RawOptions, callback: js.Function): Unit = js.native
-
-  /**
-    * Rename the collection.
-    * @param newName New name of of the collection.
-    * @param options Optional settings.k
-    * @return [[js.Promise]] if no callback passed
-    */
-  def rename[T <: js.Any](newName: String, options: RenameOptions | RawOptions): js.Promise[T] = js.native
+  def rename(newName: String,
+             options: RenameOptions | RawOptions = js.native,
+             callback: MongoCallback0 = js.native): js.Promise[Unit] = js.native
 
   /**
     * Replace a document on MongoDB
@@ -719,26 +691,23 @@ trait Collection extends js.Object {
     * @param doc      The Document that replaces the matching document
     * @param options  Optional settings.
     * @param callback The results callback
+    * @return a promise of the document if the callback was not passed
     */
-  def replaceOne(filter: js.Any, doc: js.Any, options: RawOptions, callback: js.Function): Unit = js.native
+  def replaceOne[T <: js.Any](filter: js.Any,
+                              doc: js.Any,
+                              options: ReplacementOptions | RawOptions,
+                              callback: MongoCallback1[T] = js.native): js.Promise[T] = js.native
 
   /**
     * Replace a document on MongoDB
     * @param filter   The Filter used to select the document to update
     * @param doc      The Document that replaces the matching document
     * @param callback The results callback
-    */
-  def replaceOne(filter: js.Any, doc: js.Any, callback: js.Function): Unit = js.native
-
-  /**
-    * Replace a document on MongoDB
-    * @param filter  The Filter used to select the document to update
-    * @param doc     The Document that replaces the matching document
-    * @param options Optional settings.
+    * @return a promise of the document if the callback was not passed
     */
   def replaceOne[T <: js.Any](filter: js.Any,
                               doc: js.Any,
-                              options: RawOptions = js.native): js.Promise[T] = js.native
+                              callback: MongoCallback1[T]): js.Promise[T] = js.native
 
   /**
     * Save a document. Simple full document replacement function. Not recommended for efficiency, use atomic operators
@@ -773,19 +742,8 @@ trait Collection extends js.Object {
     * @param options  Optional settings.
     * @param callback The command result callback
     */
-  def stats(options: RawOptions, callback: js.Function): Unit = js.native
-
-  /**
-    * Get all the collection statistics.
-    * @param callback The command result callback
-    */
-  def stats(callback: js.Function): Unit = js.native
-
-  /**
-    * Get all the collection statistics.
-    * @param options Optional settings.
-    */
-  def stats[T <: js.Any](options: RawOptions = js.native): js.Promise[T] = js.native
+  def stats(options: RawOptions = js.native,
+            callback: MongoCallback1[CollectionStats] = js.native): js.Promise[CollectionStats] = js.native
 
   /**
     * Updates documents.
@@ -868,7 +826,7 @@ trait Collection extends js.Object {
     * @param update   The update operations to be applied to the document
     * @param options  Optional settings.
     * @param callback The command result callback
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def updateOne(filter: js.Any,
                 update: js.Any,
@@ -880,7 +838,7 @@ trait Collection extends js.Object {
     * @param filter   The Filter used to select the document to update
     * @param update   The update operations to be applied to the document
     * @param callback The command result callback
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def updateOne(filter: js.Any,
                 update: js.Any,
@@ -891,7 +849,7 @@ trait Collection extends js.Object {
     * @param filter  The Filter used to select the document to update
     * @param update  The update operations to be applied to the document
     * @param options Optional settings.
-    * @return [[js.Promise]] if no callback passed
+    * @return a [[js.Promise completion promise]]
     */
   def updateOne(filter: js.Any, update: js.Any,
                 options: UpdateOptions | RawOptions = js.native): js.Promise[UpdateWriteOpResultObject] = js.native
@@ -915,21 +873,236 @@ object Collection {
       * @param pipeline Array containing all the aggregation framework commands for the execution.
       */
     @inline
-    def aggregateAsync[B <: js.Any](pipeline: js.Array[_ <: js.Any]): Promise[js.Array[B]] = {
-      promiseWithError1[MongoError, js.Array[B]](coll.aggregate(pipeline, _))
+    def aggregateAsync[A <: js.Any](pipeline: js.Array[_ <: js.Any]): Promise[js.Array[A]] = {
+      promiseWithError1[MongoError, js.Array[A]](coll.aggregate(pipeline, _))
     }
 
     @inline
-    def findOneAsync[T <: js.Any](selector: js.Any)(implicit ec: ExecutionContext): Future[Option[T]] = {
-      promiseWithError1[MongoError, T](coll.find(selector).limit(1).next).future map (Option(_))
+    def findOneAsync[A <: js.Any](selector: js.Any): Future[Option[A]] = {
+      promiseMongoCallback1[A](coll.find[A](selector).limit(1).next(_)).toFuture.map(Option(_))
     }
 
     @inline
-    def findOneAsync[T <: js.Any](selector: js.Any, fields: js.Array[String])(implicit ec: ExecutionContext): Future[Option[T]] = {
-      promiseWithError1[MongoError, T](coll.find(selector, js.Dictionary(fields.map(_ -> 1): _*)).limit(1).next).future map (Option(_))
+    def findOneAsync[A <: js.Any](selector: js.Any, fields: js.Array[String]): Future[Option[A]] = {
+      promiseMongoCallback1[A](coll.find[A](selector, js.Dictionary(fields.map(_ -> 1): _*))
+        .limit(1).next(_)).toFuture.map(Option(_))
     }
 
   }
 
 }
 
+/**
+  * Collection Statistics
+  */
+@js.native
+trait CollectionStats extends js.Object with Okayable {
+  var ns: String = js.native
+  var size: Double = js.native
+  var avgObjSize: Double = js.native
+  var storageSize: Double = js.native
+  var capped: Boolean = js.native
+  var count: Int = js.native
+  var nindexes: Int = js.native
+  var totalIndexSize: Int = js.native
+  var indexSizes: js.Any = js.native
+  var wiredTiger: js.Object = js.native
+}
+
+/**
+  * Aggregation Options
+  * @param readPreference           The preferred read preference
+  * @param cursor                   Return the query as cursor, on 2.6 > it returns as a real cursor on pre 2.6 it
+  *                                 returns as an emulated cursor.
+  * @param explain                  Explain returns the aggregation execution plan (requires mongodb 2.6 >).
+  * @param allowDiskUse             allowDiskUse lets the server know if it can use disk to store temporary results for
+  *                                 the aggregation (requires mongodb 2.6 >).
+  * @param maxTimeMS                maxTimeMS specifies a cumulative time limit in milliseconds for processing operations
+  *                                 on the cursor.
+  *                                 MongoDB interrupts the operation at the earliest following interrupt point.
+  * @param bypassDocumentValidation Allow driver to bypass schema validation in MongoDB 3.2 or higher.
+  */
+@ScalaJSDefined
+class AggregationOptions(var readPreference: js.UndefOr[ReadPreference] = js.undefined,
+                         var cursor: js.UndefOr[AggregationCursorOptions] = js.undefined,
+                         var explain: js.UndefOr[JBoolean] = js.undefined,
+                         var allowDiskUse: js.UndefOr[JBoolean] = js.undefined,
+                         var maxTimeMS: js.UndefOr[Integer] = js.undefined,
+                         var bypassDocumentValidation: js.UndefOr[JBoolean] = js.undefined) extends js.Object
+
+/**
+  * Aggregation Cursor Options
+  * @param batchSize The batchSize for the cursor
+  */
+@ScalaJSDefined
+class AggregationCursorOptions(var batchSize: js.UndefOr[Int] = js.undefined) extends js.Object
+
+/**
+  * Mongo Collection Retrieval Options
+  * @param w                   number | string	null	optional - The write concern.
+  * @param wtimeout            number	null	optional - The write concern timeout.
+  * @param j                   boolean	false	optional - Specify a journal write concern.
+  * @param raw                 boolean	false	optional - Return document results as raw BSON buffers.
+  * @param pkFactory           object	null	optional - A primary key factory object for generation of custom _id keys.
+  * @param readPreference      ReadPreference | string	null	optional - The preferred read preference
+  *                            (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED, ReadPreference.SECONDARY,
+  *                         ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
+  * @param serializeFunctions  boolean	false	optional - Serialize functions on any object.
+  * @param strict              boolean	false	optional - Returns an error if the collection does not exist
+  * @param capped              boolean	false	optional - Create a capped collection.
+  * @param autoIndexId         boolean	true	optional - Create an index on the _id field of the document, True by default on MongoDB 2.2 or higher off for version < 2.2.
+  * @param size                number	null	optional - The size of the capped collection in bytes.
+  * @param max                 number	null	optional - The maximum number of documents in the capped collection.
+  * @param flags               number	null	optional - Optional. Available for the MMAPv1 storage engine only to
+  *                            set the usePowerOf2Sizes and the noPadding flag.
+  * @param storageEngine       object	null	optional - Allows users to specify configuration to the storage engine on
+  *                            a per-collection basis when creating a collection on MongoDB 3.0 or higher.
+  * @param validator           object	null	optional - Allows users to specify validation rules or expressions for
+  *                            the collection. For more information, see Document Validation on MongoDB 3.2 or higher.
+  * @param validationLevel     string	null	optional - Determines how strictly MongoDB applies the validation rules
+  *                            to existing documents during an update on MongoDB 3.2 or higher.
+  * @param validationAction    string	null	optional - Determines whether to error on invalid documents or just warn
+  *                            about the violations but allow invalid documents to be inserted on MongoDB 3.2 or higher.
+  * @param indexOptionDefaults object	null	optional - Allows users to specify a default configuration for indexes
+  *                            when creating a collection on MongoDB 3.2 or higher.
+  * @param  viewOn             string	null	optional - The name of the source collection or view from which to create
+  *                            the view. The name is not the full namespace of the collection or view; i.e. does not
+  *                            include the database name and implies the same database as the view to create
+  *                            on MongoDB 3.4 or higher.
+  * @param   pipeline          array	null	optional - An array that consists of the aggregation pipeline stage.
+  *                            create creates the view by applying the specified pipeline to the viewOn collection
+  *                            or view on MongoDB 3.4 or higher.
+  * @param  collation          object	null	optional - Specify collation (MongoDB 3.4 or higher) settings for update
+  *                            operation (see 3.4 documentation for available fields).
+  */
+@ScalaJSDefined
+class CollectionOptions(val w: js.UndefOr[String] = js.undefined,
+                        val wtimeout: js.UndefOr[Boolean] = js.undefined,
+                        val j: js.UndefOr[Boolean] = js.undefined,
+                        val raw: js.UndefOr[Boolean] = js.undefined,
+                        val pkFactory: js.UndefOr[Boolean] = js.undefined,
+                        val readPreference: js.UndefOr[Boolean] = js.undefined,
+                        val serializeFunctions: js.UndefOr[Boolean] = js.undefined,
+                        val strict: js.UndefOr[Boolean] = js.undefined,
+                        val capped: js.UndefOr[Boolean] = js.undefined,
+                        val autoIndexId: js.UndefOr[String] = js.undefined,
+                        val size: js.UndefOr[Boolean] = js.undefined,
+                        val max: js.UndefOr[Boolean] = js.undefined,
+                        val flags: js.UndefOr[Boolean] = js.undefined,
+                        val storageEngine: js.UndefOr[Boolean] = js.undefined,
+                        val validator: js.UndefOr[Boolean] = js.undefined,
+                        val validationLevel: js.UndefOr[Boolean] = js.undefined,
+                        val validationAction: js.UndefOr[Boolean] = js.undefined,
+                        val indexOptionDefaults: js.UndefOr[Boolean] = js.undefined,
+                        val viewOn: js.UndefOr[Boolean] = js.undefined,
+                        val pipeline: js.UndefOr[Boolean] = js.undefined,
+                        val collation: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Delete Options
+  * @param w        optional: The write concern.
+  * @param wtimeout optional: The write concern timeout.
+  * @param j        optional: Specify a journal write concern.
+  */
+@ScalaJSDefined
+class DeleteOptions(var w: js.UndefOr[js.Any] = js.undefined,
+                    var wtimeout: js.UndefOr[Int] = js.undefined,
+                    var j: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Find-And-Update Options
+  * @param projection     Limits the fields to return for all matching documents.
+  * @param sort           Determines which document the operation modifies if the query selects multiple documents.
+  * @param maxTimeMS      The maximum amount of time to allow the query to run.
+  * @param upsert         the document if it does not exist.
+  * @param returnOriginal When false, returns the updated document rather than the original. The default is true.
+  */
+@ScalaJSDefined
+class FindAndUpdateOptions(var projection: js.UndefOr[js.Any] = js.undefined,
+                           var sort: js.UndefOr[js.Any] = js.undefined,
+                           var maxTimeMS: js.UndefOr[Integer] = js.undefined,
+                           var upsert: js.UndefOr[Boolean] = js.undefined,
+                           var returnOriginal: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Index Options
+  * @param w                       The write concern (number | string;	default: null).
+  * @param wtimeout                The write concern timeout (default: null).
+  * @param j                       Specify a journal write concern (default: false).
+  * @param unique                  Creates an unique index (default: false).
+  * @param sparse                  Creates a sparse index (default: false).
+  * @param background              Creates the index in the background, yielding whenever possible (default: false).
+  * @param dropDups                A unique index cannot be created on a key that has pre-existing duplicate values.
+  *                                If you would like to create the index anyway keeping the first document the database
+  *                                indexes and deleting all
+  *                                subsequent documents that have duplicate value (default: false).
+  * @param min                     For geospatial indexes set the lower bound for the co-ordinates (default: null).
+  * @param max                     For geospatial indexes set the high bound for the co-ordinates (default: null).
+  * @param v                       Specify the format version of the indexes (default: null).
+  * @param expireAfterSeconds      Allows you to expire data on indexes applied to a data (MongoDB 2.2 or higher) (default: null).
+  * @param name                    Override the auto-generated index name (useful if the resulting name is larger than
+  *                                128 bytes) (default: null)
+  * @param partialFilterExpression Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
+  */
+@ScalaJSDefined
+class IndexOptions(val w: js.UndefOr[Int | String] = js.undefined,
+                   val wtimeout: js.UndefOr[Int] = js.undefined,
+                   val j: js.UndefOr[Boolean] = js.undefined,
+                   val unique: js.UndefOr[Boolean] = js.undefined,
+                   val sparse: js.UndefOr[Boolean] = js.undefined,
+                   val background: js.UndefOr[Boolean] = js.undefined,
+                   val dropDups: js.UndefOr[Boolean] = js.undefined,
+                   val min: js.UndefOr[Int] = js.undefined,
+                   val max: js.UndefOr[Int] = js.undefined,
+                   val v: js.UndefOr[Int] = js.undefined,
+                   val expireAfterSeconds: js.UndefOr[Int] = js.undefined,
+                   val name: js.UndefOr[Int] = js.undefined,
+                   val partialFilterExpression: js.UndefOr[js.Any] = js.undefined) extends js.Object
+
+/**
+  * Rename Options
+  * @param dropTarget drop the target name collection if it previously exists.
+  */
+@ScalaJSDefined
+class RenameOptions(val dropTarget: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Replacement Options
+  * @param w                         The write concern
+  * @param wtimeout                  The write concern timeout.
+  * @param j                         Specify a journal write concern.
+  * @param upsert                    Update operation is an upsert.
+  * @param  bypassDocumentValidation Allow driver to bypass schema validation in MongoDB 3.2 or higher.
+  */
+@ScalaJSDefined
+class ReplacementOptions(val w: js.UndefOr[Int | String] = js.undefined,
+                         val wtimeout: js.UndefOr[Int] = js.undefined,
+                         val j: js.UndefOr[Boolean] = js.undefined,
+                         val upsert: js.UndefOr[Boolean] = js.undefined,
+                         val bypassDocumentValidation: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Document Update Options
+  * @param w        The write concern
+  * @param wtimeout The write concern timeout.
+  * @param j        Specify a journal write concern.
+  * @param upsert   Update operation is an upsert.
+  */
+@ScalaJSDefined
+class UpdateOptions(var w: js.UndefOr[Int | String] = js.undefined,
+                    var wtimeout: js.UndefOr[Int] = js.undefined,
+                    var j: js.UndefOr[Boolean] = js.undefined,
+                    var upsert: js.UndefOr[Boolean] = js.undefined) extends js.Object
+
+/**
+  * Write Options
+  * @author lawrence.daniels@gmail.com
+  */
+@ScalaJSDefined
+class WriteOptions(var w: js.UndefOr[Int | String] = js.undefined,
+                   var wtimeout: js.UndefOr[Int] = js.undefined,
+                   var j: js.UndefOr[Boolean] = js.undefined,
+                   var ordered: js.UndefOr[Boolean] = js.undefined,
+                   var upsert: js.UndefOr[Boolean] = js.undefined,
+                   var multi: js.UndefOr[Boolean] = js.undefined,
+                   var bypassDocumentValidation: js.UndefOr[Boolean] = js.undefined) extends js.Object
