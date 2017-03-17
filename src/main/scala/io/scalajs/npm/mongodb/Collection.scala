@@ -220,15 +220,13 @@ trait Collection extends js.Object {
 
   /**
     * Ensures that an index exists, if it does not it creates it
-    * @param name        The index name
     * @param fieldOrSpec Defines the index.
     * @param options     Optional settings.
     * @param callback    The command result callback
     * @return a completion promise if the callback is not present
     * @example ensureIndex(fieldOrSpec, options, callback)
     */
-  def ensureIndex(name: String,
-                  fieldOrSpec: js.Any,
+  def ensureIndex(fieldOrSpec: js.Any,
                   options: IndexOptions | RawOptions = js.native,
                   callback: js.Function = js.native): js.Promise[js.Any] = js.native
 
