@@ -569,8 +569,8 @@ trait Collection extends js.Object {
     * @param callback The command result callback
     */
   def insertOne(doc: js.Any,
-                options: WriteOptions | RawOptions,
-                callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
+                options: WriteOptions | RawOptions = js.native,
+                callback: MongoCallback1[InsertWriteOpResult] = js.native): js.Promise[InsertWriteOpResult] = js.native
 
   /**
     * Returns if the collection is a capped collection
