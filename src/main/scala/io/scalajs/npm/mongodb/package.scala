@@ -217,6 +217,22 @@ package object mongodb {
   def $set(value: (String, js.Any)*) = "$set" -> doc(value: _*)
 
   /**
+    * The $setOnInsert operator is used to set values to fields during an upsert only,
+    * the update() operation performs an insert when using the upsert option with the update().
+    * @example { $setOnInsert: { field1: value1, ... } }
+    */
+  @inline
+  def $setOnInsert(value: => js.Any) = "$set" -> value
+
+  /**
+    * The $setOnInsert operator is used to set values to fields during an upsert only,
+    * the update() operation performs an insert when using the upsert option with the update().
+    * @example { $$setOnInsert: { field1: value1, ... } }
+    */
+  @inline
+  def $setOnInsert(value: (String, js.Any)*) = "$set" -> doc(value: _*)
+
+  /**
     * Performs text search.
     * @example db.articles.find( { $text: { $search: "coffee" } } )
     * @see [[https://docs.mongodb.org/manual/reference/operator/query/text/#op._S_text]]
