@@ -2,7 +2,6 @@ package io.scalajs.npm.mongodb
 
 import io.scalajs.nodejs
 
-import scala.concurrent.Promise
 import scala.scalajs.js
 
 /**
@@ -62,18 +61,11 @@ trait AggregationCursor[T] extends nodejs.stream.Readable {
     * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
     * the results. Note that the array only contain partial results when this cursor had been previouly accessed.
     * In that case, cursor.rewind() can be used to reset the cursor.
-    * @return
-    */
-  def toArray(): Promise[js.Array[T]] = js.native
-
-  /**
-    * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
-    * the results. Note that the array only contain partial results when this cursor had been previouly accessed.
-    * In that case, cursor.rewind() can be used to reset the cursor.
     * @param callback This will be called after executing this method successfully. The first parameter will contain
     *                 the Error object if an error occurred, or null otherwise. The second parameter will contain an
     *                 array of BSON deserialized objects as a result of the query.
+    * @return a promise of the results
     */
-  def toArray(callback: MongoCallback1[js.Array[T]]): Unit = js.native
+  def toArray(callback: MongoCallback1[js.Array[T]] = js.native): js.Promise[js.Array[T]] = js.native
 
 }

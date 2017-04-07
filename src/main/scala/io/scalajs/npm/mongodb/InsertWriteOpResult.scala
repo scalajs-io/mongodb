@@ -44,6 +44,9 @@ object InsertWriteOpResult {
     @inline
     def opsAs[T]: js.Array[T] = result.ops.asInstanceOf[js.Array[T]]
 
+    @inline
+    def isOk: Boolean = result.result.isOk
+
   }
 
   /**
