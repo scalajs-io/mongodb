@@ -5,11 +5,11 @@ import sbt._
 
 import scala.language.postfixOps
 
-val scalaJsIOVersion = "0.4.0-pre3"
+val scalaJsIOVersion = "0.4.0-pre4"
 val apiVersion = scalaJsIOVersion
 val scalaJsVersion = "2.12.1"
 
-homepage := Some(url("https://github.com/scalajs.io/mongodb"))
+homepage := Some(url("https://github.com/scalajs-io/mongodb"))
 
 lazy val root = (project in file(".")).
   enablePlugins(ScalaJSPlugin).
@@ -44,7 +44,7 @@ lazy val publishingSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra :=
-    <url>https://github.com/ldaniels528/scalajs-node-npm</url>
+    <url>https://github.com/scalajs-io/mongodb</url>
       <licenses>
         <license>
           <name>MIT License</name>
