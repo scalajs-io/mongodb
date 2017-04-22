@@ -33,14 +33,14 @@ class CursorTest extends FunSpec with MongoDBTestSupport {
 
           data <- {
             // did we get at least 3 records?
-            if (iwr.result.n < 3) throw new IllegalStateException("At least 3 records were expected")
+            if (iwr.result.n < 3) throw js.JavaScriptException("At least 3 records were expected")
 
             // get the results using a find stream
             val promise = Promise[Unit]()
-            val cursor = coll.find(doc()).stream(StreamTransform((doc: Sample) => doc.toJson))
-            cursor
-              .onData(doc => info(doc.toString))
-              .onError(error => promise.failure(new RuntimeException(error.message)))
+            val stream = coll.find[Sample](doc()).stream()
+            stream
+              .onData[Sample](doc => info(doc.toString))
+              .onError(error => promise.failure(js.JavaScriptException(error.message)))
               .onEnd(() => promise.success(()))
 
             // if the promise hasn't complete in 1 sec, trigger it.

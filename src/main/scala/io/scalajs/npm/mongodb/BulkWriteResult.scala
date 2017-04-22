@@ -1,7 +1,7 @@
 package io.scalajs.npm.mongodb
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSName
+import scala.scalajs.js.annotation.JSGlobal
 
 /**
   * Bulk Write Result
@@ -13,7 +13,7 @@ import scala.scalajs.js.annotation.JSName
   * @param nRemoved  Number of removed documents
   */
 @js.native
-@JSName("BulkWriteResult")
+@JSGlobal("BulkWriteResult")
 class BulkWriteResult(val ok: Boolean,
                       val nInserted: Int,
                       val nUpdated: Int,

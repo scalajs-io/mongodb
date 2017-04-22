@@ -1,14 +1,14 @@
 package io.scalajs.npm.mongodb
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.JSName
+import scala.scalajs.js.annotation.JSGlobal
 
 /**
   * Unordered Bulk Operation
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-@JSName("UnorderedBulkOperation")
+@JSGlobal("UnorderedBulkOperation")
 class UnorderedBulkOperation() extends js.Object {
 
   /**

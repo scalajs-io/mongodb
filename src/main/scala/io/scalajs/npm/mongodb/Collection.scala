@@ -5,7 +5,7 @@ import java.lang.{Boolean => JBoolean}
 import io.scalajs.RawOptions
 import io.scalajs.util.PromiseHelper._
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
 import scala.scalajs.js.annotation.ScalaJSDefined
@@ -190,7 +190,7 @@ trait Collection extends js.Object {
     * @param options  the optional settings
     * @param callback The optional command result callback
     * @return a completion promise, if the callback was not passed
-    * @example drop([callback]): Promise
+    * @example drop([callback]): Future
     */
   def drop(options: RawOptions = js.native, callback: js.Function1[MongoError, Any] = js.native): js.Promise[js.Any] = js.native
 
@@ -441,7 +441,7 @@ trait Collection extends js.Object {
     * @param indexes  One or more index names to check.
     * @param callback The command result callback
     * @example indexExists(indexes, callback)
-    * @return Promise 
+    * @return Future 
     */
   def indexExists(indexes: js.Array[String], callback: MongoCallback1[Boolean]): Unit = js.native
 
@@ -449,7 +449,7 @@ trait Collection extends js.Object {
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
     * @param indexes One or more index names to check.
     * @example indexExists(indexes, callback)
-    * @return Promise 
+    * @return Future 
     */
   def indexExists(indexes: js.Array[String]): js.Promise[Boolean] = js.native
 
@@ -458,7 +458,7 @@ trait Collection extends js.Object {
     * @param indexes  One or more index names to check.
     * @param callback The command result callback
     * @example indexExists(indexes, callback)
-    * @return Promise 
+    * @return Future 
     */
   def indexExists(indexes: String, callback: MongoCallback1[Boolean]): Unit = js.native
 
@@ -466,7 +466,7 @@ trait Collection extends js.Object {
     * Checks if one or more indexes exist on the collection, fails on first non-existing index
     * @param indexes One or more index names to check.
     * @example indexExists(indexes, callback)
-    * @return Promise 
+    * @return Future 
     */
   def indexExists(indexes: String): js.Promise[Boolean] = js.native
 
@@ -532,7 +532,7 @@ trait Collection extends js.Object {
     * @param docs     Documents to insert.
     * @param options  Optional settings.
     * @param callback The command result callback
-    * @example insertMany(docs, options, callback): Promise
+    * @example insertMany(docs, options, callback): Future
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
                               options: WriteOptions | RawOptions,
@@ -544,7 +544,7 @@ trait Collection extends js.Object {
     * by setting the forceServerObjectId flag.
     * @param docs     Documents to insert.
     * @param callback The command result callback
-    * @example insertMany(docs, options, callback): Promise
+    * @example insertMany(docs, options, callback): Future
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
                               callback: MongoCallback1[InsertWriteOpResult]): Unit = js.native
@@ -555,7 +555,7 @@ trait Collection extends js.Object {
     * by setting the forceServerObjectId flag.
     * @param docs    Documents to insert.
     * @param options Optional settings.
-    * @example insertMany(docs, options, callback): Promise
+    * @example insertMany(docs, options, callback): Future
     */
   def insertMany[T <: js.Any](docs: js.Array[T],
                               options: WriteOptions | RawOptions = js.native): js.Promise[InsertWriteOpResult] = js.native
@@ -575,7 +575,7 @@ trait Collection extends js.Object {
   /**
     * Returns if the collection is a capped collection
     * @param callback The command result callback
-    * @example isCapped(callback): Promise
+    * @example isCapped(callback): Future
     */
   def isCapped(callback: MongoCallback1[Boolean] = js.native): js.Promise[Boolean] = js.native
 
@@ -871,19 +871,19 @@ object Collection {
       * @param pipeline Array containing all the aggregation framework commands for the execution.
       */
     @inline
-    def aggregateAsync[A <: js.Any](pipeline: js.Array[_ <: js.Any]): Promise[js.Array[A]] = {
+    def aggregateFuture[A <: js.Any](pipeline: js.Array[_ <: js.Any]): Future[js.Array[A]] = {
       promiseWithError1[MongoError, js.Array[A]](coll.aggregate(pipeline, _))
     }
 
     @inline
-    def findOneAsync[A <: js.Any](selector: js.Any): Future[Option[A]] = {
-      promiseMongoCallback1[A](coll.find[A](selector).limit(1).next(_)).toFuture.map(Option(_))
+    def findOneFuture[A <: js.Any](selector: js.Any): Future[Option[A]] = {
+      promiseWithError1[MongoError, A](coll.find[A](selector).limit(1).next(_)).map(Option(_))
     }
 
     @inline
-    def findOneAsync[A <: js.Any](selector: js.Any, fields: js.Array[String]): Future[Option[A]] = {
-      promiseMongoCallback1[A](coll.find[A](selector, js.Dictionary(fields.map(_ -> 1): _*))
-        .limit(1).next(_)).toFuture.map(Option(_))
+    def findOneFuture[A <: js.Any](selector: js.Any, fields: js.Array[String]): Future[Option[A]] = {
+      promiseWithError1[MongoError, A](coll.find[A](selector, js.Dictionary(fields.map(_ -> 1): _*))
+        .limit(1).next(_)).map(Option(_))
     }
 
   }

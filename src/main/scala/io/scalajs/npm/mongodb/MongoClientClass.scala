@@ -1,5 +1,8 @@
 package io.scalajs.npm.mongodb
 
+import io.scalajs.util.PromiseHelper._
+
+import scala.concurrent.Future
 import scala.scalajs.js
 
 /**
@@ -26,7 +29,7 @@ object MongoClientClass {
   implicit class MongoClientClassExtensions(val `class`: MongoClientClass) extends AnyVal {
 
     @inline
-    def connectAsync(url: String): js.Promise[Db] = promiseMongoCallback1[Db](`class`.connect(url, _))
+    def connectFuture(url: String): Future[Db] = promiseWithError1[MongoError, Db](`class`.connect(url, _))
 
   }
 

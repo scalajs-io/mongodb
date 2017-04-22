@@ -49,9 +49,9 @@ MongoClient.connect(url, (err, db) => {
     // Insert some documents
     col.insertMany(js.Array(new Sample(a = 1), new Sample(a = 2), new Sample(a = 3)), (err, iwr) => {        
         // Get the results using a find stream
-        val cursor = col.find(doc()).stream(StreamTransform((doc: Sample) => JSON.stringify(doc)))
-        cursor.onData((doc: Sample) => console.log(doc))
-        cursor.onEnd(() => db.close())
+        val stream = col.find[Sample](doc()).stream()
+        stream.onData[Sample](doc => console.log(doc))
+        stream.onEnd(() => db.close())
     })
 })
 
@@ -66,7 +66,7 @@ class Sample(var _id: js.UndefOr[ObjectID] = js.undefined,
 To add the `MongoDB` binding to your project, add the following to your build.sbt:  
 
 ```sbt
-libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "0.4.0-pre4"
+libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "0.4.0-pre5"
 ```
 
 Optionally, you may add the Sonatype Repository resolver:

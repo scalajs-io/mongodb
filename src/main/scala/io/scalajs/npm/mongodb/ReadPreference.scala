@@ -1,7 +1,7 @@
 package io.scalajs.npm.mongodb
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, JSName}
+import scala.scalajs.js.annotation.{JSGlobal, JSImport, JSName}
 
 /**
   * Read Preference
@@ -20,7 +20,7 @@ class ReadPreference(val mode: ReadPreferenceMode,
   * @author lawrence.daniels@gmail.com
   */
 @js.native
-@JSName("ReadPreference")
+@JSGlobal("ReadPreference")
 object ReadPreference extends js.Object {
 
   /////////////////////////////////////////////////////////////////////////////////

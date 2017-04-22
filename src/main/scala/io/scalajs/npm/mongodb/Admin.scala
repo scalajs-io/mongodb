@@ -32,19 +32,19 @@ object Admin {
   implicit class MongoAdminEnrichment(val admin: Admin) extends AnyVal {
 
     @inline
-    def profilingInfoAsync(name: String): js.Promise[ProfilingInfo] =
+    def profilingInfoFuture(name: String): js.Promise[ProfilingInfo] =
       promiseMongoCallback1[ProfilingInfo](admin.profilingInfo)
 
     @inline
-    def profilingLevelAsync(name: String): js.Promise[String] =
+    def profilingLevelFuture(name: String): js.Promise[String] =
       promiseMongoCallback1[String](admin.profilingLevel)
 
     @inline
-    def setProfilingLevelAsync(level: String): js.Promise[String] =
+    def setProfilingLevelFuture(level: String): js.Promise[String] =
       promiseMongoCallback1[String](admin.setProfilingLevel(level, _))
 
     @inline
-    def validateCollectionAsync(collectionName: String): js.Promise[ValidationResult] =
+    def validateCollectionFuture(collectionName: String): js.Promise[ValidationResult] =
       promiseMongoCallback1[ValidationResult](admin.validateCollection(collectionName, _))
 
   }

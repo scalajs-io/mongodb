@@ -1,6 +1,6 @@
 package io.scalajs.npm.mongodb
 
-import io.scalajs.{RawOptions, nodejs}
+import io.scalajs._
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
@@ -305,7 +305,7 @@ trait Cursor[T] extends nodejs.stream.Readable {
     * @param options the optional settings
     * @return returns a [[Cursor]].
     */
-  def stream(options: CursorStreamOptions): this.type = js.native
+  def stream(options: CursorStreamOptions = js.native): nodejs.stream.Readable = js.native
 
   /**
     * Returns an array of documents. The caller is responsible for making sure that there is enough memory to store
