@@ -3,7 +3,7 @@ package io.scalajs.npm.mongodb
 import io.scalajs.RawOptions
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -67,7 +67,7 @@ object MongoClient extends MongoClientClass
   * @author lawrence.daniels@gmail.com
   * @see [[https://mongodb.github.io/node-mongodb-native/api-generated/mongoclient.html#connect]]
   */
-@ScalaJSDefined
+
 class MongoClientOptions(var w: js.UndefOr[js.Any] = js.undefined,
                          var wtimeout: js.UndefOr[Int] = js.undefined,
                          var fsync: js.UndefOr[Boolean] = js.undefined,

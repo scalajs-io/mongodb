@@ -6,7 +6,7 @@ import io.scalajs.npm.mongodb.{Db, MongoError, _}
 
 import scala.scalajs.js
 import scala.scalajs.js.Any
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 
 /**
   * Grid Store
@@ -286,7 +286,7 @@ object GridStore extends GridStoreClass
   * @param j              write waits for journal sync before returning (default: false)
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class GridStoreOptions(var root: js.UndefOr[String] = js.undefined,
                        var content_type: js.UndefOr[String] = js.undefined,
                        var chunk_size: js.UndefOr[Int] = js.undefined,

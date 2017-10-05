@@ -3,7 +3,7 @@ package io.scalajs.npm.mongodb.gridfs
 import io.scalajs.npm.mongodb.Chunk
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
+
 
 /**
   * Grid Options
@@ -14,7 +14,7 @@ import scala.scalajs.js.annotation.ScalaJSDefined
   * @param metadata     arbitrary data the user wants to store.
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class GridOptions(var _id: js.Any = js.undefined,
                   var root: js.UndefOr[String] = js.undefined,
                   var content_type: js.UndefOr[String] = js.undefined,

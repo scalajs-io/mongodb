@@ -3,7 +3,7 @@ package io.scalajs.npm.mongodb
 import io.scalajs.RawOptions
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -550,7 +550,7 @@ class Db(val databaseName: String, val replicaSet: ReplSet, val options: DbOptio
   * "info":{"readOnly":false},
   * "idIndex":{"v":2,"key":{"_id":1},"name":"_id_","ns":"mi.listing_activity"}}
   */
-@ScalaJSDefined
+
 class CollectionInfo(val name: String,
                      val `type`: String,
                      val options: RawOptions,
@@ -561,7 +561,7 @@ class CollectionInfo(val name: String,
   * CollectionInfo IdIndex
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class CollectionInfo_IdIndex(val v: Int,
                              val key: js.Any,
                              val name: String,
@@ -571,7 +571,7 @@ class CollectionInfo_IdIndex(val v: Int,
   * CollectionInfo Info
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class CollectionInfo_Info(val readOnly: Boolean) extends js.Object
 
 /**
@@ -580,7 +580,7 @@ class CollectionInfo_Info(val readOnly: Boolean) extends js.Object
   * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
   *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
   */
-@ScalaJSDefined
+
 class ListCollectionsOptions(val batchSize: js.UndefOr[Int] = js.undefined,
                              val readPreference: js.UndefOr[ReadPreference] = js.undefined) extends js.Object
 
@@ -590,7 +590,7 @@ class ListCollectionsOptions(val batchSize: js.UndefOr[Int] = js.undefined,
   * @param readPreference the preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
   *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
   */
-@ScalaJSDefined
+
 class IndexInformationOptions(val full: js.UndefOr[Boolean] = js.undefined,
                               val readPreference: js.UndefOr[ReadPreference] = js.undefined) extends js.Object
 
@@ -630,7 +630,7 @@ trait DbStats extends js.Object
   * @param  level              object	'local'	optional
   *                            Specify a read concern level for the collection operations, one of [local|majority]. (only MongoDB 3.2 or higher supported)
   */
-@ScalaJSDefined
+
 class DbOptions(val authSource: js.UndefOr[String] = js.undefined,
                 val w: js.UndefOr[Int | String] = js.undefined,
                 val wtimeout: js.UndefOr[Int] = js.undefined,
@@ -654,7 +654,7 @@ class DbOptions(val authSource: js.UndefOr[String] = js.undefined,
   * @param noListener              Do not make the db an event listener to the original connection.
   * @param returnNonCachedInstance Control if you want to return a cached instance or have a new one created
   */
-@ScalaJSDefined
+
 class DbSharingOptions(val noListener: js.UndefOr[Boolean] = js.undefined,
                        val returnNonCachedInstance: js.UndefOr[Boolean] = js.undefined) extends js.Object
 
@@ -662,7 +662,7 @@ class DbSharingOptions(val noListener: js.UndefOr[Boolean] = js.undefined,
   * Database Statistics Options
   * @param scale Divide the returned sizes by scale value.
   */
-@ScalaJSDefined
+
 class DbStatsOptions(val scale: js.UndefOr[Double] = js.undefined) extends js.Object
 
 /**
@@ -670,7 +670,7 @@ class DbStatsOptions(val scale: js.UndefOr[Double] = js.undefined) extends js.Ob
   * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
   *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
   */
-@ScalaJSDefined
+
 class ReadPreferenceOptions(val readPreference: js.UndefOr[ReadPreference | String] = js.undefined) extends js.Object
 
 /**
@@ -679,7 +679,7 @@ class ReadPreferenceOptions(val readPreference: js.UndefOr[ReadPreference | Stri
   * @param wtimeout The write concern timeout.
   * @param j        Specify a journal write concern..
   */
-@ScalaJSDefined
+
 class RemoveUserOptions(val w: js.UndefOr[Int | String] = js.undefined,
                         val wtimeout: js.UndefOr[Int] = js.undefined,
                         val j: js.UndefOr[Boolean] = js.undefined) extends js.Object

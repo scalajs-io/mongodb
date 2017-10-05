@@ -3,7 +3,7 @@ package io.scalajs.npm.mongodb
 import io.scalajs._
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -357,7 +357,7 @@ object Cursor extends js.Object {
   * @param readPreference The preferred read preference (ReadPreference.PRIMARY, ReadPreference.PRIMARY_PREFERRED,
   *                       ReadPreference.SECONDARY, ReadPreference.SECONDARY_PREFERRED, ReadPreference.NEAREST).
   */
-@ScalaJSDefined
+
 class CountOptions(val skip: js.UndefOr[Int] = js.undefined,
                    val limit: js.UndefOr[Int] = js.undefined,
                    val maxTimeMS: js.UndefOr[Int] = js.undefined,
@@ -395,7 +395,7 @@ class CountOptions(val skip: js.UndefOr[Int] = js.undefined,
   * @param exhaust               have the server send all the documents at once as getMore packets.
   * @param partial               have the sharded system return a partial result from mongos.
   */
-@ScalaJSDefined
+
 class CursorOptions(var skip: js.UndefOr[Int] = js.undefined,
                     var limit: js.UndefOr[Int] = js.undefined,
                     var sort: js.Any = null,
@@ -427,5 +427,5 @@ class CursorOptions(var skip: js.UndefOr[Int] = js.undefined,
   * @param transform A transformation method applied to each document emitted by the stream.
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class CursorStreamOptions(var transform: js.UndefOr[js.Function] = js.undefined) extends js.Object

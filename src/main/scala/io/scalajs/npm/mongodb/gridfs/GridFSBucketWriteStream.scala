@@ -5,7 +5,7 @@ import io.scalajs.RawOptions
 import io.scalajs.nodejs.stream
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -36,7 +36,7 @@ class GridFSBucketWriteStream(bucket: GridFSBucket, filename: String, options: W
   * @param wtimeout       number	null	optional The write concern timeout
   * @param j              number	null	optional The journal write concern
   */
-@ScalaJSDefined
+
 class WriteStreamOptions(val id: js.UndefOr[ObjectID | String | Int] = js.undefined,
                          val chunkSizeBytes: js.UndefOr[Int] = js.undefined,
                          val w: js.UndefOr[Int] = js.undefined,

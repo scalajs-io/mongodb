@@ -3,13 +3,13 @@ package io.scalajs.npm.mongodb
 import io.scalajs.npm.mongodb.BulkWriteOpResultObject.MongnoIdRef
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
+
 
 /**
   * Bulk Write Operation Result Object
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 trait BulkWriteOpResultObject extends js.Object {
   // Number of documents inserted.
   val nInserted: Int

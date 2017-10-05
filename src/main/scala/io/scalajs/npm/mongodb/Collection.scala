@@ -8,7 +8,7 @@ import io.scalajs.util.PromiseHelper._
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
+
 import scala.scalajs.js.|
 
 /**
@@ -920,7 +920,7 @@ trait CollectionStats extends js.Object with Okayable {
   *                                 MongoDB interrupts the operation at the earliest following interrupt point.
   * @param bypassDocumentValidation Allow driver to bypass schema validation in MongoDB 3.2 or higher.
   */
-@ScalaJSDefined
+
 class AggregationOptions(var readPreference: js.UndefOr[ReadPreference] = js.undefined,
                          var cursor: js.UndefOr[AggregationCursorOptions] = js.undefined,
                          var explain: js.UndefOr[JBoolean] = js.undefined,
@@ -932,7 +932,7 @@ class AggregationOptions(var readPreference: js.UndefOr[ReadPreference] = js.und
   * Aggregation Cursor Options
   * @param batchSize The batchSize for the cursor
   */
-@ScalaJSDefined
+
 class AggregationCursorOptions(var batchSize: js.UndefOr[Int] = js.undefined) extends js.Object
 
 /**
@@ -973,7 +973,7 @@ class AggregationCursorOptions(var batchSize: js.UndefOr[Int] = js.undefined) ex
   * @param  collation          object	null	optional - Specify collation (MongoDB 3.4 or higher) settings for update
   *                            operation (see 3.4 documentation for available fields).
   */
-@ScalaJSDefined
+
 class CollectionOptions(val w: js.UndefOr[String] = js.undefined,
                         val wtimeout: js.UndefOr[Boolean] = js.undefined,
                         val j: js.UndefOr[Boolean] = js.undefined,
@@ -1002,7 +1002,7 @@ class CollectionOptions(val w: js.UndefOr[String] = js.undefined,
   * @param wtimeout optional: The write concern timeout.
   * @param j        optional: Specify a journal write concern.
   */
-@ScalaJSDefined
+
 class DeleteOptions(var w: js.UndefOr[js.Any] = js.undefined,
                     var wtimeout: js.UndefOr[Int] = js.undefined,
                     var j: js.UndefOr[Boolean] = js.undefined) extends js.Object
@@ -1015,7 +1015,7 @@ class DeleteOptions(var w: js.UndefOr[js.Any] = js.undefined,
   * @param upsert         the document if it does not exist.
   * @param returnOriginal When false, returns the updated document rather than the original. The default is true.
   */
-@ScalaJSDefined
+
 class FindAndUpdateOptions(var projection: js.UndefOr[js.Any] = js.undefined,
                            var sort: js.UndefOr[js.Any] = js.undefined,
                            var maxTimeMS: js.UndefOr[Integer] = js.undefined,
@@ -1042,7 +1042,7 @@ class FindAndUpdateOptions(var projection: js.UndefOr[js.Any] = js.undefined,
   *                                128 bytes) (default: null)
   * @param partialFilterExpression Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
   */
-@ScalaJSDefined
+
 class IndexOptions(val w: js.UndefOr[Int | String] = js.undefined,
                    val wtimeout: js.UndefOr[Int] = js.undefined,
                    val j: js.UndefOr[Boolean] = js.undefined,
@@ -1061,7 +1061,7 @@ class IndexOptions(val w: js.UndefOr[Int | String] = js.undefined,
   * Rename Options
   * @param dropTarget drop the target name collection if it previously exists.
   */
-@ScalaJSDefined
+
 class RenameOptions(val dropTarget: js.UndefOr[Boolean] = js.undefined) extends js.Object
 
 /**
@@ -1072,7 +1072,7 @@ class RenameOptions(val dropTarget: js.UndefOr[Boolean] = js.undefined) extends 
   * @param upsert                    Update operation is an upsert.
   * @param  bypassDocumentValidation Allow driver to bypass schema validation in MongoDB 3.2 or higher.
   */
-@ScalaJSDefined
+
 class ReplacementOptions(val w: js.UndefOr[Int | String] = js.undefined,
                          val wtimeout: js.UndefOr[Int] = js.undefined,
                          val j: js.UndefOr[Boolean] = js.undefined,
@@ -1086,7 +1086,7 @@ class ReplacementOptions(val w: js.UndefOr[Int | String] = js.undefined,
   * @param j        Specify a journal write concern.
   * @param upsert   Update operation is an upsert.
   */
-@ScalaJSDefined
+
 class UpdateOptions(var w: js.UndefOr[Int | String] = js.undefined,
                     var wtimeout: js.UndefOr[Int] = js.undefined,
                     var j: js.UndefOr[Boolean] = js.undefined,
@@ -1096,7 +1096,7 @@ class UpdateOptions(var w: js.UndefOr[Int | String] = js.undefined,
   * Write Options
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class WriteOptions(var w: js.UndefOr[Int | String] = js.undefined,
                    var wtimeout: js.UndefOr[Int] = js.undefined,
                    var j: js.UndefOr[Boolean] = js.undefined,

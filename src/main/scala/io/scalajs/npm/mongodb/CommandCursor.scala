@@ -107,19 +107,19 @@ object CommandCursor {
       * CommandCursor stream data event, fired for each document in the cursor.
       */
     @inline
-    def onData(handler: js.Function1[T, Any]): cursor.type = cursor.on("close", handler)
+    def onData(handler: js.Function1[T, Any]): cursor.type = cursor.on("data", handler)
 
     /**
       * CommandCursor stream end event
       */
     @inline
-    def onEnd(handler: js.Function0[Any]): cursor.type = cursor.on("close", handler)
+    def onEnd(handler: js.Function0[Any]): cursor.type = cursor.on("end", handler)
 
     /**
       * CommandCursor stream readable event
       */
     @inline
-    def onReadable(handler: js.Function0[Any]): cursor.type = cursor.on("close", handler)
+    def onReadable(handler: js.Function0[Any]): cursor.type = cursor.on("readable", handler)
 
   }
 

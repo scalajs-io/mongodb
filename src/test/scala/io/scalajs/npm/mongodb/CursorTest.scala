@@ -9,7 +9,7 @@ import scala.concurrent.Promise
 import scala.concurrent.duration._
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
+
 
 /**
   * Cursor Tests
@@ -64,7 +64,7 @@ class CursorTest extends FunSpec with MongoDBTestSupport {
   */
 object CursorTest {
 
-  @ScalaJSDefined
+
   class Sample(var _id: js.UndefOr[ObjectID] = js.undefined,
                var a: js.UndefOr[Int] = js.undefined)
     extends js.Object

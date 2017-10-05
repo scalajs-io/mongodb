@@ -4,7 +4,7 @@ package gridfs
 import io.scalajs.{RawOptions, nodejs}
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -53,7 +53,7 @@ class GridFSBucketReadStream(chunks: Collection,
   * @param end   Optional 0-based offset in bytes to stop streaming before.
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class ReadStreamOptions(var sort: js.UndefOr[Integer] = js.undefined,
                         var skip: js.UndefOr[Integer] = js.undefined,
                         var start: js.UndefOr[Integer] = js.undefined,

@@ -40,7 +40,7 @@ import io.scalajs.JSON
 import io.scalajs.nodejs._
 import io.scalajs.npm.mongodb._
 import scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
+
 
 val url = "mongodb://localhost:27017/test"
 MongoClient.connect(url, (err, db) => {
@@ -55,7 +55,7 @@ MongoClient.connect(url, (err, db) => {
     })
 })
 
-@ScalaJSDefined
+
 class Sample(var _id: js.UndefOr[ObjectID] = js.undefined, 
              var a: js.UndefOr[Int] = js.undefined) 
   extends js.Object
@@ -66,7 +66,7 @@ class Sample(var _id: js.UndefOr[ObjectID] = js.undefined,
 To add the `MongoDB` binding to your project, add the following to your build.sbt:  
 
 ```sbt
-libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "0.4.1"
+libraryDependencies += "io.scalajs.npm" %%% "mongodb" % "0.4.2"
 ```
 
 Optionally, you may add the Sonatype Repository resolver:

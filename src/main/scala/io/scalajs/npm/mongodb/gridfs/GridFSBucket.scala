@@ -4,7 +4,7 @@ package gridfs
 import io.scalajs.RawOptions
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
 
 /**
@@ -97,7 +97,7 @@ class GridFSBucket() extends js.Object {
   * @param end   Optional 0-based offset in bytes to stop streaming before
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class DownloadStreamOptions(var start: js.UndefOr[Int] = js.undefined,
                             var end: js.UndefOr[Int] = js.undefined) extends js.Object
 
@@ -109,7 +109,7 @@ class DownloadStreamOptions(var start: js.UndefOr[Int] = js.undefined,
   * @param end      Optional 0-based offset in bytes to stop streaming before
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class DownloadStreamByNameOptions(var revision: js.UndefOr[Int] = js.undefined,
                                   var start: js.UndefOr[Int] = js.undefined,
                                   var end: js.UndefOr[Int] = js.undefined) extends js.Object
@@ -123,7 +123,7 @@ class DownloadStreamByNameOptions(var revision: js.UndefOr[Int] = js.undefined,
   * @param skip            Optional: skip for cursor
   * @param sort            Optional: sort for cursor
   */
-@ScalaJSDefined
+
 class GridFSBucketFindOptions(var batchSize: js.UndefOr[Int] = js.undefined,
                               var limit: js.UndefOr[Int] = js.undefined,
                               var maxTimeMS: js.UndefOr[Int] = js.undefined,
@@ -135,7 +135,7 @@ class GridFSBucketFindOptions(var batchSize: js.UndefOr[Int] = js.undefined,
   * GridFS Bucket Options
   * @author lawrence.daniels@gmail.com
   */
-@ScalaJSDefined
+
 class GridFSOptions(var bucketName: js.UndefOr[String] = js.undefined,
                     var chunkSizeBytes: js.UndefOr[Int] = js.undefined,
                     var readPreference: js.UndefOr[js.Any] = js.undefined,
@@ -148,7 +148,7 @@ class GridFSOptions(var bucketName: js.UndefOr[String] = js.undefined,
   * @param contentType    Optional: string to store in the file document's contentType field
   * @param aliases        Optional: array of strings to store in the file document's aliases field
   */
-@ScalaJSDefined
+
 class UploadStreamOptions(var chunkSizeBytes: js.UndefOr[Int] = js.undefined,
                           var metadata: js.UndefOr[js.Any] = js.undefined,
                           var contentType: js.UndefOr[String] = js.undefined,
